@@ -34,7 +34,7 @@ Contains scripts and drivers that analyse RGT-wise data in .mat format to obtain
       Contains a series of "drivers" that operate over the .mat files. The analysis is looped over month-by-month. These loops take place across hemispheres, years, and month, but accumulate all beams into grids. 
   - **Bash_Scripts/**
       Contains scripts for submitting SLURM jobs that run the relevant conversion code. For example IS2_nc_to_mat.sh submits a job to run drive_conversion.m 
-  - _analyse_waves_and_FSD.m _
+  - _analyse_waves_and_FSD.m_
       Script to do the actual analysis for wave, FSD, LIF info by combining many RGTs into grids using forms of Matlab accumarray function. 
 
 **Output/**
