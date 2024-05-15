@@ -34,7 +34,7 @@ Contains scripts and drivers that take in IS2 data and organizes it into Matlab 
 
 **Analysis/** 
 
-Contains scripts and drivers that analyse RGT-wise data in .mat format to obtain gridded products. The output is places in Output/
+Contains scripts and drivers that analyse RGT-wise data in .mat format to obtain gridded products. The output is placed in the Output/ directory
   
   - _analyse_waves_and_FSD.m_
       Script to do the actual analysis for wave, FSD, LIF info by combining many RGTs into grids using forms of Matlab accumarray function.
