@@ -1,7 +1,11 @@
-% Initialize parallel pool if required
+%% drive_conversion.m
+% Function that drives the conversion of all netcdf-based data. 
 
+% Initialize parallel pool if required
 DO_PARALLEL = 0;
-DO_REPLACE = 1; 
+
+% Decide if existing files should be replaced
+DO_REPLACE = 1;
 
 if DO_PARALLEL
 
@@ -27,21 +31,20 @@ data_loc = fullfile(Code_loc,'Data','All_Track_Data');
 addpath(fullfile(Code_loc,'Conversion'));
 
 
-% Hemispheric file directories
+% Hemispheric file directories. To be changed in future iteration when it
+% becomes necessary. Should just search through files using data_loc/*/*.nc
+% for example
 filedirs = {fullfile(data_loc, 'NH/'), fullfile(data_loc, 'SH/')};
 
-% Hemispheric save directories
+% Hemispheric save directories. Keep this I think for simplicity. 
 savedirs = { fullfile(Code_loc,'Data','Beam_Data_Mat/NH'), fullfile(Code_loc,'Data','Beam_Data_Mat/SH')};
 
 % IS2 beam identifies
 beam_names = {'gt1r','gt1l','gt2r','gt2l','gt3r','gt3l'};
 
-% Decide if existing files should be replaced
-DO_REPLACE = true;
-
 %% Main conversion loop
 % This is written as a separate function do_conversion to allow for
-% switching between the parallel or serial codes in testing. 
+% switching between the parallel or serial codes in testing.
 
 % Loop through hemisphere directories
 for i = 1:2
