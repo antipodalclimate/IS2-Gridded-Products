@@ -48,6 +48,9 @@ Contains scripts and drivers that analyse RGT-wise data in .mat format to obtain
   Subfolder that contains output from Analysis scripts. Output data will be in subfolders of the form HEM-GRID (i.e. NH-100x100 is NH gridded data on a 100x100 km gridding). This data is large and is ignored here except for showing directory structure. 
 
 **Supporting_Files/**
+
+Contains supporting files for running Analysis/Conversion scripts. 
+
       - **KDTrees/**
         These are the set of KDTree searchers which should be developed before running Analysis scripts. Code to generate them is provided. These are used to ascertain how to convert an IS2 track to a gridded location on the globe. 
       - **Grid_Files/**
