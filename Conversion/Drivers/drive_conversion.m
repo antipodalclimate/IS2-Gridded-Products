@@ -1,16 +1,25 @@
 % Initialize parallel pool if required
-try
 
-    parpool();
+DO_PARALLEL = 0;
+DO_REPLACE = 1; 
 
-catch 
+if DO_PARALLEL
 
+    try
+
+        parpool(gcp('nocreate'));
+
+    catch
+
+
+    end
 
 end
-% Change for local system. 
+
+% Change for local system.
 Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products';
 
-% Location of all Data. Fullfile adds the correct slash. 
+% Location of all Data. Fullfile adds the correct slash.
 data_loc = fullfile(Code_loc,'Data','All_Track_Data');
 
 % Add location of conversion code
@@ -30,7 +39,9 @@ beam_names = {'gt1r','gt1l','gt2r','gt2l','gt3r','gt3l'};
 % Decide if existing files should be replaced
 DO_REPLACE = true;
 
-%%
+%% Main conversion loop
+% This is written as a separate function do_conversion to allow for
+% switching between the parallel or serial codes in testing. 
 
 % Loop through hemisphere directories
 for i = 1:2
@@ -38,47 +49,56 @@ for i = 1:2
     for yr = 2018:2024
         % Loop through months
         for mo = 1:12
-            % Execute conversion in parallel for each beam
-            for beamind = 1:6
-           
-                % Format year and month strings
-                yrstr = num2str(yr);
-                mostr = sprintf('%02d', mo); % Pad month with zero if needed
-
-                % Generate full save path for the current beam
-                save_str = fullfile(savedirs{i}, [yrstr mostr '-beam-' beam_names{beamind} '.mat']);
-
-                if ~DO_REPLACE
-                
-                    disp(['Checking For Existing Converted Files At ' save_str]);
-
-                    % Attempt to load the mat file to check existence
-                 
-                    try
-             
-                        MF = matfile(save_str);
-                        disp(['Already exists at ' save_str]);
-                   
-                    catch err
-                        disp(['Does not exist at ' save_str]);
-                        % Call function to convert data if file does not exist
-                        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
-                  
-                    end
-              
-                else
-           
-                    disp(['Not Checking: Replacing Anything at ' save_str]);
-          
-                    % Call function to convert data regardless of existence
-                    convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
-             
+            % Execute conversion in parallel for each beam if required
+            if DO_PARALLEL
+                parfor beamind = 1:6
+                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE);
                 end
-    
+            else
+                for beamind = 1:6
+                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE);
+                end
             end
-  
         end
 
     end
+
+end
+
+function do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE);
+
+% Format year and month strings
+yrstr = num2str(yr);
+mostr = sprintf('%02d', mo); % Pad month with zero if needed
+
+% Generate full save path for the current beam
+save_str = fullfile(savedirs{i}, [yrstr mostr '-beam-' beam_names{beamind} '.mat']);
+
+if ~DO_REPLACE
+
+    disp(['Checking For Existing Converted Files At ' save_str]);
+
+    % Attempt to load the mat file to check existence
+
+    try
+
+        MF = matfile(save_str);
+        disp(['Already exists at ' save_str]);
+
+    catch err
+        disp(['Does not exist at ' save_str]);
+        % Call function to convert data if file does not exist
+        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
+
+    end
+
+else
+
+    disp(['Not Checking: Replacing Anything at ' save_str]);
+
+    % Call function to convert data regardless of existence
+    convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
+
+end
 
 end
