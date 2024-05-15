@@ -68,7 +68,10 @@ max_seg_size = 200; % Maximum size for individual segments
 earthellipsoid = referenceSphere('earth','m');
 sortvec = [];
 dupevec = []; 
+nousevec = []; 
+idvec = []; 
 exmax_diff_threshold = 1; % meters - difference in two surfaces tracked by the ex-max algorithm. 
+
 
 
 %% Wave-related things
@@ -97,45 +100,81 @@ end
 
 % Total segments - counted progressively
 lenct = 0;
+len_dupe_ct = 0; 
 
 %%
 numtracks = length(timer); % Number of tracks
 
 %%
 for i = 1:numtracks
-    %%
+  
+ 
+  %%
     % First compute distance along track using lat and lon coordinates
-    
+    unusable = find(abs(fieldmat{i,height_id}) > 1000 | fieldmat{i,length_id} > max_seg_size);
+
     lat = fieldmat{i,lat_id};
     lon = fieldmat{i,lon_id};
-    
+
+ 
     if length(lat) > 1 % along-track distance
         dist = distance([lat(1:end-1) lon(1:end-1)],[lat(2:end) lon(2:end)],earthellipsoid);
     else
-        dist = [];
+	    dist = [];
     end
     
-    if ~isempty(dist)
-        dist = [0; cumsum(dist)];
+    if length(lat) > 1 
+       dist = [0; cumsum(dist)];
     end
+
+    % total number of segments
+    num_segs = length(dist); 
     
     %% Preprocess The track
-    % Remove duplicate values
+    % Remove unphysical values
+    try 
+    lat(unusable) = []; 
+    lon(unusable) = []; 
+    dist(unusable) = []; 
+    
+    catch unuserror
+
+	
+	 disp(['CHRIS IS WORKING ON AN ERROR FOR SHORT TRACK DISTANCES NT is ' i]); 
+	 dist = []; 
+	
+    end
+
+    % Number of segments that aren't too long. 
+    num_usable_segs = length(dist); 
+
+    % Now remove  duplicate values
     dupes = find(diff(dist)<0.5)+1; % Find the duplicate points
+
     dist(dupes) = []; % Those with such a distance get cut
     [dist,b] = sort(dist); % Sort the distance to be increasing.
-    
+  
+    % unusable vector. 
+    nousevec = cat(1,nousevec,unusable + lenct);   
+
     % Sorting to put in order. Have indices of duplicate values first
     % Keep in mind where in the initial vector we had a duplicate
-    dupevec = cat(1,dupevec,dupes + lenct);
+   
+    dupevec = cat(1,dupevec,dupes + len_dupe_ct);
     
     % Sorting vector so can be put in order
     sortvec = cat(1,sortvec,b+length(sortvec));
     
     % Dedupe and sort ice vector
     is_ice = fieldmat{i,type_id};
+    is_ice(unusable) = []; 
     is_ice(dupes) = [];
     is_ice = is_ice(b);
+    
+    % Get the ID of each track
+    ID_unique = 0*is_ice + i;
+
+    idvec = cat(1,idvec,ID_unique);
     
     % Ocean is the stuff that isn't ice.
     is_ocean = is_ice > 1;
@@ -145,11 +184,13 @@ for i = 1:numtracks
         
         % Dedupe and sort height vector
         height = fieldmat{i,height_id};
-        height(dupes) = [];
+        height(unusable) = []; 
+         height(dupes) = [];
         height = height(b);
         
         % Dedupe and sort segment length vector
         seg_len = fieldmat{i,length_id};
+        seg_len(unusable) = []; 
         seg_len(dupes) = [];
         seg_len = seg_len(b);
         
@@ -293,9 +334,9 @@ for i = 1:numtracks
         
     end
     
-    % This adds the dupe vector by the size of the field
-    lenct = lenct + length(is_ocean);
-    
+    % This adds the unusable vector by the size of the field
+    lenct = lenct + num_segs;
+    len_dupe_ct = len_dupe_ct + num_usable_segs; 
     
 end
 
@@ -304,17 +345,38 @@ end
 % Get into a matrix and then sort it!
 fieldmat = cell2mat(fieldmat(:,:));
 % fieldmat = cell2mat(fieldmat(:,[1:7 9])); - previously we skipped ssh_flag
-fieldmat(dupevec,:) = [];
-fieldmat = fieldmat(sortvec,:);
+nsegs_og = size(fieldmat,1); 
+
+% if size(fieldmat,1) > 1
+% lenner = nanmax(fieldmat(:,length_id));
+% end
+
+% Take out the unusable segments
+% fieldmat(nousevec,:) = []; 
+% Now from that smaller matrix take out the duplicates
+% fieldmat(dupevec,:) = [];
+% fieldmat = fieldmat(sortvec,:);
 
 %% Some general fields worth computing each time.
 
-numsegs = size(fieldmat,1);
+num_segs_total = size(fieldmat,1);
 
-fprintf('Have %d total segments to analyse \n',numsegs)
+fprintf('Have %d total segments to analyse \n',num_segs_total)
+if num_segs_total >= 1
 
+if DO_FSD
+
+    floemat = fieldmat(all_floeids_0,:);
+
+end
+
+fieldmat(nousevec,:) = [];
+fieldmat(dupevec,:) = [];
+fieldmat = fieldmat(sortvec,:);
+
+nanmax(fieldmat(:,length_id))
 % What grid will we bin the lat-lon values into
-
+kdloc = ['../Processing/KDTrees/KDTree_' gridname];
 kdloc = ['../Processing/KDTrees/KDTree_' gridname];
 
 load(kdloc,'lat_X','lon_X','KDTree');
@@ -327,6 +389,11 @@ posloc_all = knnsearch(KDTree,[fieldmat(:,lat_id) fieldmat(:,lon_id)],'K',1);
 %%
 % Take the naive sea ice concentration as the fraction of segments divided
 % by the number of segments that are classified as ice or ocean
+% dbstop
+% Get the number of tracks that intersect each geographic location
+lenfac = @(x) length(unique(x)); 
+
+num_tracks_geo = accumarray(posloc_all,idvec,[numel(lat_X) 1],lenfac); 
 
 % Add up the total length of leads in each locatiom
 conc_lead_geo = accumarray(posloc_all,(fieldmat(:,type_id) > 1).*(fieldmat(:,length_id)),[numel(lat_X) 1],@sum);
@@ -342,7 +409,7 @@ conc_spec_geo = conc_spec_geo ./ accumarray(posloc_all,(fieldmat(:,type_id) > 0)
 % Subtract from 1
 conc_spec_geo = 1 - conc_spec_geo; 
 
-conc_SSMI_geo = accumarray(posloc_all,fieldmat(:,end),[numel(lat_X) 1],@mean);
+conc_SSMI_geo = accumarray(posloc_all,fieldmat(:,conc_id),[numel(lat_X) 1],@mean);
 
 %% Compute number of segments intersecting a region
 
@@ -542,66 +609,71 @@ if DO_WAVE
     
     disp(['Saving ' outdir_waves]);
     
-    save(outdir_waves,'lat_X','lon_X','*_geo','numsegs','numtracks');
+    save(outdir_waves,'lat_X','lon_X','*_geo','num_segs_total','numtracks');
     
 end
 
-clearvars *_geo -except conc_*_geo
+clearvars *_geo -except conc_*_geo num_tracks_geo
 
-%%
-if DO_FSD
+if DO_FSD   %%
     
-    fieldmat = fieldmat(all_floeids_0,:);
 
-    %%
-    % Criteria for inclusion of a location. Kind of already did it.
+% Criteria for inclusion of a location. Kind of already did it.
     fprintf('\nMeasured %2.0f thousand naive chord lengths \n',length(all_floeids_0)/1e3);
     fprintf('Total chord length is %2.0f km \n',sum(all_floelengths_0)/1000);
     fprintf('Average chord length (number) is %2.0f m \n',sum(all_floelengths_0)/length(all_floeids_0));
-    
+
     fprintf('\nOf these,%2.0f thousand are usable \n',sum(all_usable_floes)/1e3);
     fprintf('For a chord length of %2.0f km \n',sum(all_floelengths_0(logical(all_usable_floes)))/1000);
     fprintf('Average chord length (number) is %2.0f m \n',sum(all_floelengths_0(logical(all_usable_floes)))/length(all_floeids_0));
-    
-    
+
+
     % What grid will we bin the lat-lon values into
-    
+
     kdloc = ['../Processing/KDTrees/KDTree_' gridname];
-    
+
     load(kdloc,'lat_X','lon_X','KDTree');
-    
+
     disp('Finding Locations');
-    
+
     % K nerest neighbor search into the loaded grid to find grid locations
     % For all the naive floes
-    posloc_floes = knnsearch(KDTree,[fieldmat(:,lat_id) fieldmat(:,lon_id)],'K',1);
-    
+    posloc_floes = knnsearch(KDTree,[floemat(:,lat_id) floemat(:,lon_id)],'K',1);
+
     %% FSD Geographic Fields
-    
+
     % Number of floes at each point
     floenum_0_geo = accumarray(posloc_floes,1 + 0*all_floeids_0,[numel(lat_X) 1],@sum);
     floelength_0_geo = accumarray(posloc_floes,all_floelengths_0,[numel(lat_X) 1],@sum);
     floe_seglengths_0_geo = accumarray(posloc_floes,all_floe_seglengths_0,[numel(lat_X) 1],@sum);
-    
+
     % Number of good floes at each point
     floenum_geo = accumarray(posloc_floes,all_usable_floes,[numel(lat_X) 1],@sum);
     floelength_geo = accumarray(posloc_floes,all_floelengths_0.*all_usable_floes,[numel(lat_X) 1],@sum);
     floe_seglengths_geo = accumarray(posloc_floes,all_floe_seglengths_0.*all_usable_floes,[numel(lat_X) 1],@sum);
-    
-    
+
+
     CLD_mom_0_geo = accumarray(posloc_floes,all_usable_floes,[numel(lat_X) 1],@sum);
     CLD_mom_1_geo = accumarray(posloc_floes,all_floelengths_0.*all_usable_floes,[numel(lat_X) 1],@sum);
     CLD_mom_2_geo = accumarray(posloc_floes,(all_floelengths_0.^2).*all_usable_floes,[numel(lat_X) 1],@sum);
     CLD_mom_3_geo = accumarray(posloc_floes,(all_floelengths_0.^3).*all_usable_floes,[numel(lat_X) 1],@sum);
-    
+
     MCL_geo = CLD_mom_1_geo ./ CLD_mom_0_geo;
     RCL_geo = CLD_mom_3_geo ./ CLD_mom_2_geo;
-    
+
     disp(['Saving ' outdir_fsd]);
-    
-    save(outdir_fsd,'lat_X','lon_X','*_geo','numsegs','numtracks');
-    
+
+    save(outdir_fsd,'lat_X','lon_X','*_geo','num_segs_total','numtracks');
+
 end
+
+
+
+%%
+else
+  disp('No Segments - not saving anyything'); 
+end
+
 %%
 
 

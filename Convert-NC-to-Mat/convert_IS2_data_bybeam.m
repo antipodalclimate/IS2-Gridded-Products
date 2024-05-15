@@ -47,12 +47,12 @@ mostr=num2str(month);
 if month<10, mostr=['0',mostr]; end
 
 % Obtains all .h5 files in that directory
-[filedir '*ATL10*' yrstr mostr '*.nc']
+% [filedir '*ATL07-0*_' yrstr mostr '*.nc']
 
 % Because indexing is the same, and filenames are the same, these should
 % follow each other.
 
-ATL07_files = dir([filedir '*ATL07*_' yrstr mostr '*.h5']);
+ATL07_files = dir([filedir '*ATL07-0*_' yrstr mostr '*.nc']);
 
 ngranules = length(ATL07_files);
 nfields = length(field_names);
@@ -64,42 +64,59 @@ timer = cell(ngranules,1);
 
 %%
 for fileind = 1:ngranules
-    
+ 
     if mod(fileind,100) == 1
         
-        fprintf('File %d of %d \n',fileind,length(ATL07_files));
+        fprintf('Month %d in %d, File %d of %d \n',month,year, fileind,length(ATL07_files));
         
     end
     
     % Respective file names
     filename_ATL07 = [filedir ATL07_files(fileind).name];
     
+    corrupt_file = false; 
+
     % Load in start of track
     try
+
         timer{fileind} = h5readatt(filename_ATL07,'/','time_coverage_start');
-        
-    catch timerrread
-        disp('WE HAVE A GODDAMN ERROR RIGHT HERE');
-        filename_ATL07
-        disp('END OF ERROR');
-        throw(timerrread)
-        
-    end
-    
+             
     % For all segment-indexed fields
     for fieldind = 1:nfields
+
+	fields{fileind,fieldind} = double(zeros(0,1));  
         
-        try
+ 	if ~corrupt_file
+
+	try
             
             fields{fileind,fieldind} = double(h5read(filename_ATL07,['/' beam_names{beamind} '/' field_names{fieldind}]));
             
         catch errread
-            
-            fields{fileind,fieldind} = double(zeros(0,1));
+
+            fprintf('Filename is %s \n',filename_ATL07)
+            fprintf('Field is number %d, named %s \n',fieldind,field_names{fieldind}); 
+            disp(errread.message)
+            movefile(filename_ATL07,'/gpfs/data/epscor/chorvat/IS2/All_Tracks_NetCDF/Corrupted/')
+ 	    disp('Moved to Corrupted folder'); 
+	    corrupt_file = true; 
             
         end
         
+	end
+
     end
+
+    catch timerrread
+        disp('WE HAVE A GODDAMN ERROR RIGHT HERE');
+        filename_ATL07
+        disp(timerrread)
+        disp('END OF ERROR');
+        movefile(filename_ATL07,'/gpfs/data/epscor/chorvat/IS2/All_Tracks_NetCDF/Corrupted/')
+        disp('Moved to Corrupted folder');
+
+    end
+
     
 end
 
@@ -109,11 +126,11 @@ end
 % same dimensions
 %timer = cell2mat(timer);
 
-if ngranules > 0
+% if ngranules > 0
     
-    save_path = [savedir yrstr mostr '-beam-' beam_names{beamind} '.mat']
+    save_path = [savedir yrstr mostr '-beam-' beam_names{beamind} '.mat'];
     save(save_path,'field_names','fields','timer','beam_names','-v7.3');
     
-end
+% end
 
 end
