@@ -50,11 +50,10 @@ Contains scripts and drivers that analyse RGT-wise data in .mat format to obtain
 **Supporting_Files/**
 
 Contains supporting files for running Analysis/Conversion scripts. 
-
-      - **KDTrees/**
-        These are the set of KDTree searchers which should be developed before running Analysis scripts. Code to generate them is provided. These are used to ascertain how to convert an IS2 track to a gridded location on the globe. 
-      - **Grid_Files/**
-        These are grid files for the 25km polar stereographic grid. They are helpful for generating the tree searchers. 
+  - **KDTrees/**
+      These are the set of KDTree searchers which should be developed before running Analysis scripts. Code to generate them is provided. These are used to ascertain how to convert an IS2 track to a gridded location on the globe.
+  - **Grid_Files/**
+      These are grid files for the 25km polar stereographic grid. They are helpful for generating the tree searchers. 
 
 
 
