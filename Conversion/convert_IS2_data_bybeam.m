@@ -1,5 +1,5 @@
 function convert_IS2_data_bybeam(year, month, beamind, filedir, save_str)
-% Converts and saves data from ATL07 netcdf files.
+% Converts and saves data from ATL10 HDF5 files.
 %
 % Inputs:
 %   year      - Year of the data
@@ -17,10 +17,8 @@ function convert_IS2_data_bybeam(year, month, beamind, filedir, save_str)
 
 [data_loc,~,~] = fileparts(filedir);
 
-% Beam names
+% Options and Initialization
 beam_names = {'gt1r', 'gt1l', 'gt2r', 'gt2l', 'gt3r', 'gt3l'};
-
-% Field names we wish to convert to the .mat format by month/beam
 field_names = {
     'sea_ice_segments/heights/height_segment_height', ...
     'sea_ice_segments/heights/height_segment_length_seg', ...

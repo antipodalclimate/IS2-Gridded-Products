@@ -1,110 +1,96 @@
-% This code takes the collected track data, bins it into lat-lon bins,
-% and then produces gridded maps of relevant data
-%
-% Input:
-%   save_path - Directory of the .mat file created by previous code.
+%% Analyse_frac_wave_affected
+% This code takes the collected track data, the subsetted data, bins it
+% into lat-lon bins, and then produces maps of the fraction of those bins
+% that are affected by waves.
 
-clear;
+% Input require save_path - which is the directory of the .mat file created
+% by previous code.
 
-% Change for local system.
-Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products/';
-% Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
-% Location of all Data. Fullfile adds the correct slash.
-data_loc = fullfile(Code_loc,'Data','Beam_Data_Mat');
-output_loc = fullfile(Code_loc,'Output');
-analysis_loc = fullfile(Code_loc,'Analysis/');
+clear
 
-addpath(analysis_loc); 
+file_heading = './';
 
-% Configuration
-hemi_dir = {'NH', 'SH'};
+hemi_dir = {'NH','SH',};
+
+DO_WAVES = 1;
+DO_FSD = 1;
+DO_REPLACE = 0;
+
+% try
+%  parpool()
+% catch err
+%   err
+% end
+%%
+
 gridname = '25km';
 
-PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
-    'DO_REPLACE',{0,0,0}, ...
-    'code_folder',{fullfile(analysis_loc,'FSD'),fullfile(analysis_loc,'WAVES'),fullfile(analysis_loc,'LIF')});
+addpath('../Processing/');
 
-% Looping over hemispheres and files
-for hemi_ind = 1:length(hemi_dir)
-
-    % List the files in each hemisphere
-    files = dir(fullfile(data_loc,hemi_dir{hemi_ind}, '*.mat'));
-
-    % Directory where processed files will be saved. This specifies the
-    % hemisphere and the grid used in the product.
-    save_dir = fullfile(output_loc,hemi_dir{hemi_ind},gridname);
-
-    % Create the save directories
-    create_directories(save_dir,PROCESSES);
-
-    % For every individual file, need to ascertain where the data will be
-    % saved and whether there exists data there already that we don't want
-    % to overwrite. DO_REPLACE flags tell us not to overwrite data if it is
-    % found there.
-    for file_ind = 1:length(files)
-
-        file_dir = files(file_ind).folder;
-        file_name = files(file_ind).name;
-
-        for proc_ind = 1:length(PROCESSES)
-
-            temp_save_loc = fullfile(save_dir,PROCESSES(proc_ind).name,files(file_ind).name);
-
-            PROCESSES(proc_ind).DO_ANALYSIS = shouldProcessFile(temp_save_loc,PROCESSES(proc_ind).DO_REPLACE,PROCESSES(proc_ind).name);
-
-        end
-
-        if sum([PROCESSES(:).DO_ANALYSIS]) > 0
-
-            % This runs the analysis code for the given beam/month, subject
-            % to whatever we have passed for PROCESSES and using the grid
-            % we identify. 
-            analyse_file(fullfile(file_dir, file_name), PROCESSES,gridname);
-
-        end
-
-    end
-
-end
-
-
-function create_directories(save_dir,PROCESSES)
-% Create necessary directories for saving processed files
-
-if ~exist(save_dir, 'dir')
+for i = 1:2 % length(hemi_dir)
+    
+    file_dir = [file_heading hemi_dir{i}];
+    
+    files = dir([file_dir '/*.mat']);
+    
+    % Overall place where we will save each file
+    save_dir = [file_heading 'Processed/' hemi_dir{i} '-' gridname '/'];
+    
     mkdir(save_dir);
+    mkdir([save_dir 'WAVES/']);
+    mkdir([save_dir 'FSD/']);
+    
+    % par
+    for filename = 1:length(files)% :-1:1
+        
+        disp('-----------------------------------------');
+        disp(['File at ' file_dir files(filename).name(1:end-4)]);
+        
+        % Specific file save name
+        save_loc_waves = [save_dir 'WAVES/' files(filename).name];
+        save_loc_fsd = [save_dir 'FSD/' files(filename).name];
+        
+        
+        if (exist([save_loc_waves]) == 2) & (~DO_REPLACE)
+            
+            make_waves = 0;
+            disp('Already There At ');
+            disp(save_loc_waves);      
+        else
+            
+            make_waves = 1;
+            disp(['Saving wave files to ' save_loc_waves]);
+            
+        end
+       
+    
+    if DO_FSD
+        
+        if (exist([save_loc_fsd]) == 2) & (~DO_REPLACE)
+            
+            make_fsd = 0;
+            disp('Already There');
+            
+        else
+            
+            make_fsd = 1;
+            
+            disp(['Saving FSD files to ' save_loc_fsd]);
+            
+        end
+        
+    else
+	make_fsd = 0; 
 end
 
-for i = 1:length(PROCESSES)
 
+if make_fsd + make_waves > 0
+   
+    analyse_waves_and_FSD([file_dir '/' files(filename).name], ...
+        save_loc_waves,save_loc_fsd,gridname,make_waves,make_fsd);
 
-    if ~exist(fullfile(save_dir, PROCESSES(i).name), 'dir')
-
-        mkdir(fullfile(save_dir, PROCESSES(i).name));
-        
+end    
 
     end
-
-
-end
-
-end
-
-function DO_ANALYSIS = shouldProcessFile(save_loc, DO_REPLACE,name)
-% Determine whether to process the file based on existence and DO_REPLACE flag
-
-% If the file exists and we don't want to replace it, don't analyse it.
-if exist(save_loc, 'file') == 2 && ~DO_REPLACE
-    disp([name 'files already exist: ' save_loc]);
-    DO_ANALYSIS = 0;
-
-else
-
-    % If it doesn't exists, or we do want to replace anything, let's go for
-    % it.
-    % disp(['Saving ' name ' files to ' save_loc]);
-    DO_ANALYSIS = 1;
-
-end
-
+    
 end

@@ -73,11 +73,37 @@ idvec = [];
 exmax_diff_threshold = 1; % meters - difference in two surfaces tracked by the ex-max algorithm. 
 
 
+
+%% Wave-related things
+
+if DO_WAVE
+    
+    height_moving_avg = [];
+    height_moving_std = [];
+    moving_en = [];
+    ssh = [];
+    ssh_moving_std = [];
+    ssh_neighbors = [];
+    moving_neg = [];
+    moving_pos = [];
+    moving_ssh_no = [];
+    
+end
+
+if DO_FSD
+    % FSD-related things
+    all_floelengths_0 = [];
+    all_floeids_0 = [];
+    all_floe_seglengths_0 = [];
+    all_usable_floes = [];
+end
+
 % Total segments - counted progressively
 lenct = 0;
 len_dupe_ct = 0; 
 
 %%
+numtracks = length(timer); % Number of tracks
 
 %%
 for i = 1:numtracks
