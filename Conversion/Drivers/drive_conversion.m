@@ -1,5 +1,5 @@
 %% drive_conversion.m
-% Function that drives the conversion of all netcdf-based data. 
+% Function that drives the conversion of all netcdf-based data.
 
 % Initialize parallel pool if required
 DO_PARALLEL = 0;
@@ -21,8 +21,8 @@ if DO_PARALLEL
 end
 
 % Change for local system.
-Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products';
-
+% Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products/';
+Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
 % Location of all Data. Fullfile adds the correct slash.
 data_loc = fullfile(Code_loc,'Data','All_Track_Data');
 
@@ -36,7 +36,7 @@ addpath(fullfile(Code_loc,'Conversion'));
 % for example
 filedirs = {fullfile(data_loc, 'NH/'), fullfile(data_loc, 'SH/')};
 
-% Hemispheric save directories. Keep this I think for simplicity. 
+% Hemispheric save directories. Keep this I think for simplicity.
 savedirs = { fullfile(Code_loc,'Data','Beam_Data_Mat/NH'), fullfile(Code_loc,'Data','Beam_Data_Mat/SH')};
 
 % IS2 beam identifies
