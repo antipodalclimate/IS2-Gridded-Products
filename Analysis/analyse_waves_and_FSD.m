@@ -62,54 +62,15 @@ for i = 1:numtracks
     if DO_WAVE % Values specific to the wave identification
         % Need heights, segment lengths, etc.
         
-        % Dedupe and sort height vector
-        height = fieldmat{i,height_id};
-        height(unusable) = []; 
-         height(dupes) = [];
-        height = height(b);
-        
-        % Dedupe and sort segment length vector
-        seg_len = fieldmat{i,length_id};
-        seg_len(unusable) = []; 
-        seg_len(dupes) = [];
-        seg_len = seg_len(b);
-        
         % This is the index of the nearest neighbor to each point that has open
         % water
         
-        if isempty(dist(is_ocean))
-            
-            dist_to_ssh = nan*dist;
-            
-        else
-            
-            [~,dist_to_ssh] = knnsearch(dist(is_ocean),dist);
-        end
-        
-        if sum(is_ocean) > 1
-            
-            % This is the interpolated SSH field, on all of the dist places
-            ssh_interp = interp1(dist(is_ocean),height(is_ocean),dist);
-            
-            
-        else
-            
-            ssh_interp = nan*dist;
-            
-        end
+      
         
     end
     
     %% Now do local computations
     
-    if DO_WAVE
-
-    end
-    
-    if DO_FSD
-
-        
-    end
     
     % This adds the unusable vector by the size of the field
     lenct = lenct + num_segs;

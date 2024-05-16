@@ -22,8 +22,8 @@ if ~isempty(up)
     Uloc = up - 1;
     Uloc(Uloc==0) = 1;
 
-    floe_length = tmp_dist(down) - tmp_dist(up);
-    floe_ind = round(.5*(down + up));
+    floe_length = AT_dist(down) - AT_dist(up);
+    floe_ind = round(.5*(down + up))';
     floe_seglength = floe_length./(down - up)';
     floe_nsegs = (down - up)';
 

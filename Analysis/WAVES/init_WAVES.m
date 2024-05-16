@@ -1,11 +1,11 @@
 % Initialization of wave code. 
 
-height_moving_avg = [];
-height_moving_std = [];
-moving_en = [];
-ssh = [];
-ssh_moving_std = [];
-ssh_neighbors = [];
-moving_neg = [];
-moving_pos = [];
-moving_ssh_no = [];
+ALL_height_moving_avg = [];
+ALL_height_moving_std = [];
+ALL_moving_en = [];
+ALL_ssh = [];
+ALL_ssh_moving_std = [];
+ALL_ssh_neighbors = [];
+ALL_moving_neg = [];
+ALL_moving_pos = [];
+ALL_moving_ssh_no = [];

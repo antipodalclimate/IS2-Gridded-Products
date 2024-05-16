@@ -12,6 +12,7 @@ IS2data = matfile(file_path);
 
 fieldmat = IS2data.fields;
 load(file_path,'timer');
+load(file_path,'track_cycle');
 
 % Fieldmat is nseg x nfields - for every segment we have
 % latitude/longitude/elevation/segment length/photon rate/freeboard
@@ -38,10 +39,15 @@ disp(['Processing file: ' file_path]);
 
 % We have two types of files
 % AT_X is the along-track version of field X consisting of raw data
-% These are processed in the first analyse_P call. 
+% These are processed in the first analyse_P call. These might be shared
+% across processed. 
 
 % ALL_X is the version of field X accumulated across multiple RGTs/Beams
 % These are processed in the grid_P call. 
+
+% Variables with no first capitalized part are internal to any process.
+% They should be contained to that piece of the code itself. We may opt to
+% wipe those fields later. 
 
 init_ALL; 
 
@@ -57,6 +63,8 @@ end
 for track_ind = 1:numtracks % for every track
 
     % First compute distance along track using lat and lon coordinates
+
+    track_rgt = track_cycle(track_ind);
 
     AT_lat = fieldmat{track_ind,ID.lat};
     AT_lon = fieldmat{track_ind,ID.lon};
@@ -82,7 +90,7 @@ for track_ind = 1:numtracks % for every track
 
     % total number of segments in the track.
     num_segs = length(AT_dist);
-    num_usable_segs = sum(usable);
+    num_usable_segs = length(usable);
 
     %% Preprocess The track
     % Remove unphysical values
@@ -138,5 +146,10 @@ for track_ind = 1:numtracks % for every track
         end
 
     end
+
+    % This adds the unusable vector by the size of the field
+    lenct = lenct + num_segs;
+    len_dupe_ct = len_dupe_ct + num_usable_segs;
+
 end
 
