@@ -45,12 +45,19 @@ nfields = length(field_names);
 % Initialize the output fields
 fields = cell(ngranules, nfields);
 timer = cell(ngranules, 1);
+track_date = nan(ngranules,1);
+track_cycle = nan(ngranules,1);
 
 % Process each file
 for fileind = 1:ngranules
     if mod(fileind, 100) == 1
         fprintf('Month %d in %d, File %d of %d \n', month, year, fileind, ngranules);
     end
+
+    splitname = split(ATL07_files(fileind).name,'_'); 
+    
+    track_date(fileind) = datenum(splitname{3},'YYYYmmDDHHMMss');
+    track_cycle(fileind) = str2num(splitname{4});
 
     filename_ATL07 = fullfile(filedir, ATL07_files(fileind).name);
     corrupt_file = false;
@@ -80,5 +87,5 @@ for fileind = 1:ngranules
 end
 
 % Save results
-save(save_str, 'field_names', 'fields', 'timer', 'beam_names', '-v7.3');
+save(save_str, 'field_names', 'fields', 'timer', 'beam_names','track_cycle','track_date','-v7.3');
 end

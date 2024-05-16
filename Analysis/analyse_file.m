@@ -24,8 +24,6 @@ if numel(fieldmat) == 0
 
 end
 
-
-
 disp('-----------------------------------------');
 disp(['Processing file: ' file_path]);
 
@@ -38,10 +36,12 @@ disp(['Processing file: ' file_path]);
 % structures (WAVES.height, or similar). For now we will not add this but
 % note it to be changed in the future if the code enjoys wider adoption.
 
-% Here we do some initialization needed by any process code
+% We have two types of files
+% AT_X is the along-track version of field X consisting of raw data
+% These are processed in the first analyse_P call. 
 
-numtracks = length(timer); % Number of tracks
-earthellipsoid = referenceSphere('earth','m'); % For distance computation
+% ALL_X is the version of field X accumulated across multiple RGTs/Beams
+% These are processed in the grid_P call. 
 
 init_ALL; 
 
@@ -58,68 +58,75 @@ for track_ind = 1:numtracks % for every track
 
     % First compute distance along track using lat and lon coordinates
 
-    tmp_lat = fieldmat{track_ind,ID.lat};
-    tmp_lon = fieldmat{track_ind,ID.lon};
+    AT_lat = fieldmat{track_ind,ID.lat};
+    AT_lon = fieldmat{track_ind,ID.lon};
 
-    if length(tmp_lat) > 1 % along-track distance
+    if length(AT_lat) > 1 % along-track distance
         % These are effectively the along-track distances between central
         % points in each segment.
-        tmp_dist = distance([tmp_lat(1:end-1) tmp_lon(1:end-1)],[tmp_lat(2:end) tmp_lon(2:end)],earthellipsoid);
+        AT_dist = distance([AT_lat(1:end-1) AT_lon(1:end-1)],[AT_lat(2:end) AT_lon(2:end)],earthellipsoid);
     else
-        tmp_dist = [];
+        AT_dist = [];
     end
 
     % We exclude heights greater than 1km and segments that are too long,
     % and segments that are overlapping, to start. We will exclude others later.
     usable = find(abs(fieldmat{track_ind,ID.height}) < 1000 ...
         & fieldmat{track_ind,ID.length} < OPTS.max_seg_size ...
-        & [tmp_dist(1); tmp_dist] > 0.5);
+        & [AT_dist(1); AT_dist] > 0.5);
 
     % Distance is now the sum of distances
-    if length(tmp_lat) > 1
-        tmp_dist = [0; cumsum(tmp_dist)];
+    if length(AT_lat) > 1
+        AT_dist = [0; cumsum(AT_dist)];
     end
 
     % total number of segments in the track.
-    num_segs = length(tmp_dist);
+    num_segs = length(AT_dist);
     num_usable_segs = sum(usable);
 
     %% Preprocess The track
     % Remove unphysical values
     try
 
-        tmp_lat = tmp_lat(usable);
-        tmp_lon = tmp_lon(usable);
-        tmp_dist = tmp_dist(usable);
+        AT_lat = AT_lat(usable);
+        AT_lon = AT_lon(usable);
+        AT_dist = AT_dist(usable);
 
     catch
 
         disp(['CHRIS IS WORKING ON AN ERROR FOR SHORT TRACK DISTANCES NT is ' track_ind]);
-        tmp_dist = [];
+        AT_dist = [];
 
     end
 
     % Now sort by distance.
 
-    [tmp_dist,sort_ind] = sort(tmp_dist); % Sort the distance to be increasing.
+    [AT_dist,sort_ind] = sort(AT_dist); % Sort the distance to be increasing.
 
-    usable_vector = cat(1,usable_vector,usable + lenct);   
+    ALL_usable = cat(1,ALL_usable,usable + lenct);   
 
     % Sorting vector so can be put in order
-    sortvec = cat(1,sortvec,sort_ind+length(sortvec));
+    ALL_sorter = cat(1,ALL_sorter,sort_ind+length(ALL_sorter));
+
+    %% All along-track raw data will have the prefix AT
 
     % Dedupe and sort ice vector
-    is_ice = fieldmat{track_ind,ID.type};
-    is_ice = is_ice(usable);
-    is_ice = is_ice(sort_ind);
+    AT_is_ice = fieldmat{track_ind,ID.type}(usable(sort_ind));
 
-    % Get the ID of each track
-    ID_unique = 0*is_ice + track_ind;
+    % Dedupe and sort height vector
+    AT_height = fieldmat{track_ind,ID.height}(usable(sort_ind));
 
-    idvec = cat(1,idvec,ID_unique);
+    % Dedupe and sort segment length vector
+    AT_seg_len = fieldmat{track_ind,ID.length}(usable(sort_ind));
+
+    % Get the ID of each track at the resolution of each segment. 
+    id_unique = 0*AT_is_ice + track_ind;
+    rgt_unique = 0*AT_is_ice + track_rgt;
+
+    ALL_ids = cat(1,ALL_ids,id_unique);
 
     % Ocean is the stuff that isn't ice.
-    is_ocean = is_ice > 1;
+    AT_is_ocean = AT_is_ice > 1;
 
     %% Now we do the specific calculations for along-track data 
     for proc_ind = 1:length(PROCESSES)

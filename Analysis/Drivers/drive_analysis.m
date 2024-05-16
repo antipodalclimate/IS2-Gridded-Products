@@ -7,8 +7,9 @@
 clear;
 
 % Change for local system.
-Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products/';
-% Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
+% This should do it, if the code is run in the Driver folder. 
+Code_loc = dir(fullfile('..','..')).folder;
+
 % Location of all Data. Fullfile adds the correct slash.
 data_loc = fullfile(Code_loc,'Data','Beam_Data_Mat');
 output_loc = fullfile(Code_loc,'Output');

@@ -1,6 +1,5 @@
 function analyse_waves_and_FSD(file_path,outdir_waves,outdir_fsd,gridname,DO_WAVE,DO_FSD)
 %%
-% edit quickly
 
 % A pointer for the .mat file with IS2 data.
 IS2data = matfile(file_path);
@@ -14,31 +13,6 @@ IS2data = matfile(file_path);
 % total_under_geo - nlat x nlon - fraction (of number) " . Equal to twice
 % the number of all segments in each bin that are negative.
 
-% field_names = ...
-%     { ... % Get the ice segment information
-%     'sea_ice_segments/heights/height_segment_height' ...
-%     'sea_ice_segments/heights/height_segment_length_seg', ...
-%     'sea_ice_segments/latitude', ...
-%     'sea_ice_segments/longitude', ...
-%     'sea_ice_segments/stats/photon_rate', ... %    'freeboard_beam_segment/beam_freeboard/beam_fb_height', ...
-%     'sea_ice_segments/heights/height_segment_type', ...
-%     'sea_ice_segments/heights/height_segment_ssh_flag', ...
-%     'sea_ice_segments/stats/ice_conc', ...
-%     'sea_ice_segments/stats/exmax_mean_1', ...
-%     'sea_ice_segments/stats/exmax_mean_2', ...
-%     };
-
-% Used to track which field is which. 
-height_id = 1; 
-length_id = 2; 
-lat_id = 3; 
-lon_id = 4; 
-photon_id = 5; 
-type_id = 6; 
-ssh_id = 7; 
-conc_id = 8; 
-exm1_id = 9; 
-exm2_id = 10; 
 
 
 % Options

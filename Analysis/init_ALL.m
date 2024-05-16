@@ -18,10 +18,13 @@ OPTS.window_10k = 10000; % 10km window
 OPTS.window_50k = 50000; % 50km window
 OPTS.max_seg_size = 200; % Maximum size for individual segments to be kept
 
-sortvec = []; % Will be used to sort the matfile
-usable_vector = []; % Indicates when a segment is included
-idvec = []; % Identification of segment
+ALL_sorter = []; % Will be used to sort the matfile
+ALL_usable = []; % Indicates when a segment is included
+ALL_ids = []; % Identification of segment
 
 % Total segments - counted progressively
 lenct = 0;
 len_dupe_ct = 0; 
+
+numtracks = length(timer); % Number of tracks
+earthellipsoid = referenceSphere('earth','m'); % For distance computation
