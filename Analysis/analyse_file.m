@@ -24,23 +24,12 @@ if numel(fieldmat) == 0
 
 end
 
-% Here are indices corresponding to specific file components
-% Used to track which field is which.
-% These should be verified in convert_IS2_data_bybeam.m
-ID = struct();
-ID.height = 1;
-ID.length = 2;
-ID.lat = 3;
-ID.lon = 4;
-ID.prate = 5;
-ID.type = 6;
-ID.ssh = 7;
-ID.conc_SSMI = 8;
-ID.conc_AMSR = 9;
+
 
 disp('-----------------------------------------');
 disp(['Processing file: ' file_path]);
 
+%%
 % Now we initialize the required pieces. We will keep all data in the
 % current workspace because some of it is duplicative. So we have separate
 % calls to init and analysis codes for each component we wish to add. The
@@ -52,11 +41,67 @@ disp(['Processing file: ' file_path]);
 % Here we do some initialization needed by any process code
 
 numtracks = length(timer); % Number of tracks
+earthellipsoid = referenceSphere('earth','m'); % For distance computation
 
+init_ALL; 
 
-
+% Initialize information needed for each process.
 for i = 1:length(PROCESSES)
     if PROCESSES(i).DO_ANALYSIS == 1
         run([PROCESSES(i).code_folder '/init_' PROCESSES(i).name '.m'])
     end
 end
+
+%% Now start the main loop
+
+for i = 1:numtracks % for every track
+
+    % First compute distance along track using lat and lon coordinates
+
+    tmp_lat = fieldmat{i,ID.lat};
+    tmp_lon = fieldmat{i,ID.lon};
+
+    if length(tmp_lat) > 1 % along-track distance
+        % These are effectively the along-track distances between central
+        % points in each segment.
+        tmp_dist = distance([tmp_lat(1:end-1) tmp_lon(1:end-1)],[tmp_lat(2:end) tmp_lon(2:end)],earthellipsoid);
+    else
+        tmp_dist = [];
+    end
+
+    % We exclude heights greater than 1km and segments that are too long,
+    % and segments that are overlapping, to start. We will exclude others later.
+    usable = find(abs(fieldmat{i,ID.height}) < 1000 ...
+        & fieldmat{i,ID.length} < OPTS.max_seg_size ...
+        & [tmp_dist(1); tmp_dist] > 0.5);
+
+    % Distance is now the sum of distances
+    if length(tmp_lat) > 1
+        tmp_dist = [0; cumsum(tmp_dist)];
+    end
+
+    % total number of segments in the track.
+    num_segs = length(tmp_dist);
+    num_usable_segs = sum(usable);
+
+    %% Preprocess The track
+    % Remove unphysical values
+    try
+
+        tmp_lat = tmp_lat(usable);
+        tmp_lon = tmp_lon(usable);
+        tmp_dist = tmp_dist(usable);
+
+    catch
+
+        disp(['CHRIS IS WORKING ON AN ERROR FOR SHORT TRACK DISTANCES NT is ' i]);
+        tmp_dist = [];
+
+    end
+
+    % Now sort by distance.
+
+    [dist,b] = sort(dist); % Sort the distance to be increasing.
+
+end
+

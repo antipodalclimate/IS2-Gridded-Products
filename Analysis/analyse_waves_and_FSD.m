@@ -60,22 +60,9 @@ disp('Loaded');
 
 %% Remove places with local low surface heights
 
-% Identify local moving average
-window_1k = 1000;
-window_10k = 10000; % meters - size of moving window
-window_50k = 50000;
-max_seg_size = 200; % Maximum size for individual segments
-earthellipsoid = referenceSphere('earth','m');
-sortvec = [];
-dupevec = []; 
-nousevec = []; 
-idvec = []; 
-exmax_diff_threshold = 1; % meters - difference in two surfaces tracked by the ex-max algorithm. 
 
 
-% Total segments - counted progressively
-lenct = 0;
-len_dupe_ct = 0; 
+
 
 %%
 
@@ -84,49 +71,11 @@ for i = 1:numtracks
   
  
   %%
-    % First compute distance along track using lat and lon coordinates
-    unusable = find(abs(fieldmat{i,height_id}) > 1000 | fieldmat{i,length_id} > max_seg_size);
 
-    lat = fieldmat{i,lat_id};
-    lon = fieldmat{i,lon_id};
 
- 
-    if length(lat) > 1 % along-track distance
-        dist = distance([lat(1:end-1) lon(1:end-1)],[lat(2:end) lon(2:end)],earthellipsoid);
-    else
-	    dist = [];
-    end
+
     
-    if length(lat) > 1 
-       dist = [0; cumsum(dist)];
-    end
 
-    % total number of segments
-    num_segs = length(dist); 
-    
-    %% Preprocess The track
-    % Remove unphysical values
-    try 
-    lat(unusable) = []; 
-    lon(unusable) = []; 
-    dist(unusable) = []; 
-    
-    catch unuserror
-
-	
-	 disp(['CHRIS IS WORKING ON AN ERROR FOR SHORT TRACK DISTANCES NT is ' i]); 
-	 dist = []; 
-	
-    end
-
-    % Number of segments that aren't too long. 
-    num_usable_segs = length(dist); 
-
-    % Now remove  duplicate values
-    dupes = find(diff(dist)<0.5)+1; % Find the duplicate points
-
-    dist(dupes) = []; % Those with such a distance get cut
-    [dist,b] = sort(dist); % Sort the distance to be increasing.
   
     % unusable vector. 
     nousevec = cat(1,nousevec,unusable + lenct);   

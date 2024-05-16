@@ -14,14 +14,15 @@ data_loc = fullfile(Code_loc,'Data','Beam_Data_Mat');
 output_loc = fullfile(Code_loc,'Output');
 analysis_loc = fullfile(Code_loc,'Analysis/');
 
-addpath(analysis_loc); 
+addpath(analysis_loc ...
+    ); 
 
 % Configuration
 hemi_dir = {'NH', 'SH'};
 gridname = '25km';
 
 PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
-    'DO_REPLACE',{0,0,0}, ...
+    'DO_REPLACE',{1,1,1}, ...
     'code_folder',{fullfile(analysis_loc,'FSD'),fullfile(analysis_loc,'WAVES'),fullfile(analysis_loc,'LIF')});
 
 % Looping over hemispheres and files

@@ -21,14 +21,14 @@ if DO_PARALLEL
 end
 
 % Change for local system.
-% Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products/';
-Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
+Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products/';
+% Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
 % Location of all Data. Fullfile adds the correct slash.
 data_loc = fullfile(Code_loc,'Data','All_Track_Data');
 
 % Add location of conversion code
 
-addpath(fullfile(Code_loc,'Conversion'));
+addpath(fullfile(Code_loc,'Conversion/'));
 
 
 % Hemispheric file directories. To be changed in future iteration when it
