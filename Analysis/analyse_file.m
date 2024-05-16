@@ -101,7 +101,22 @@ for i = 1:numtracks % for every track
 
     % Now sort by distance.
 
-    [dist,b] = sort(dist); % Sort the distance to be increasing.
+    [tmp_dist,sort_ind] = sort(tmp_dist); % Sort the distance to be increasing.
+
+    usable_vector = cat(1,usable_vector,usable + lenct);   
+
+    % Sorting vector so can be put in order
+    sortvec = cat(1,sortvec,sort_ind+length(sortvec));
+
+    % Dedupe and sort ice vector
+    is_ice = fieldmat{i,ID.type};
+    is_ice = is_ice(usable);
+    is_ice = is_ice(sort_ind);
+
+    % Get the ID of each track
+    ID_unique = 0*is_ice + i;
+
+    idvec = cat(1,idvec,ID_unique);
 
 end
 

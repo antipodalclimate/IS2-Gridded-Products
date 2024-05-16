@@ -101,7 +101,12 @@ for i = 1:numtracks % for every track
 
     % Now sort by distance.
 
-    [tmp_dist,b] = sort(tmp_dist); % Sort the distance to be increasing.
+    [tmp_dist,sort_ind] = sort(tmp_dist); % Sort the distance to be increasing.
+
+    usable_vector = cat(1,usable_vector,usable + lenct);   
+
+
+    
 
 end
 

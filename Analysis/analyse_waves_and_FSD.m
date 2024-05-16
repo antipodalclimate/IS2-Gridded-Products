@@ -77,27 +77,10 @@ for i = 1:numtracks
     
 
   
-    % unusable vector. 
-    nousevec = cat(1,nousevec,unusable + lenct);   
 
-    % Sorting to put in order. Have indices of duplicate values first
-    % Keep in mind where in the initial vector we had a duplicate
-   
-    dupevec = cat(1,dupevec,dupes + len_dupe_ct);
     
-    % Sorting vector so can be put in order
-    sortvec = cat(1,sortvec,b+length(sortvec));
     
-    % Dedupe and sort ice vector
-    is_ice = fieldmat{i,type_id};
-    is_ice(unusable) = []; 
-    is_ice(dupes) = [];
-    is_ice = is_ice(b);
     
-    % Get the ID of each track
-    ID_unique = 0*is_ice + i;
-
-    idvec = cat(1,idvec,ID_unique);
     
     % Ocean is the stuff that isn't ice.
     is_ocean = is_ice > 1;
