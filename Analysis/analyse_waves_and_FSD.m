@@ -128,114 +128,11 @@ for i = 1:numtracks
     %% Now do local computations
     
     if DO_WAVE
-        
-        % How far away is the nearest SSH point.
-        ssh_neighbors = cat(1,ssh_neighbors,dist_to_ssh);
-        
-        
-        % Index of points in this window
-        pts = length(ssh_neighbors)-length(seg_len)+1:length(ssh_neighbors);
-        
-        %% Objects interpolated on the 50km moving window
-        % Total wave energy and SSH
-        
-        % SSH
-        ssh = cat(1,ssh,ssh_interp); % movmean(ssh_interp,window_50k,'samplepoints',dist));
-        
-        % Moving average wave energy
-        % Number of SSH points within that window
-        
-        moving_en = cat(1,moving_en,movmean((height-ssh(pts)).^2 .* seg_len,window_50k,'samplepoints',dist));
-        
-        
-        %% Objects interpolated on the 10km moving window
-        % Standard deviation of Height
-        
-        % height_moving_avg = cat(1,height_moving_avg,movmean(height,window_variance,'samplepoints',dist));
-        height_moving_std = cat(1,height_moving_std,movstd(height,window_10k,'samplepoints',dist));
-        
-        moving_ssh_no = cat(1,moving_ssh_no,movsum(is_ocean,window_10k,'samplepoints',dist));
-        
-        ssh_moving_std = cat(1,ssh_moving_std,movstd(ssh_interp,window_10k,'samplepoints',dist));
-        
-        
-        %% Objects interpolated on the 1km moving window
-        
-        % Negative values of adjusted SSH
-        isneg = height - ssh(pts) < 0;
-        
-        moving_neg = cat(1,moving_neg,movsum(isneg,window_1k,'samplepoints',dist));
-        moving_pos = cat(1,moving_pos,movsum(~isneg,window_1k,'samplepoints',dist));
-        
+
     end
     
     if DO_FSD
-        %% FSD-related things
-        up = strfind([0,is_ocean'],[0 1]);
-        down = strfind([is_ocean',0],[1 0]);
-        
-        if ~isempty(up)
-            
-            toosmall = intersect(up,down);
-            up = setxor(up,toosmall)';
-            down = setxor(down,toosmall)';
-            
-            Uloc = up - 1;
-            Uloc(Uloc==0) = 1;
-            
-            floelen = dist(down) - dist(up);
-            floeind = round(.5*(down + up));
-            floe_seglength = floelen./(down - up);
-            floe_nsegs = down - up;
-            
-            
-        else
-            
-            floelen = [];
-            floeind = [];
-            floe_seglength = [];
-            floe_nsegs = [];
-            
-        end
-        
-        %%
-        
-        naive_floe = (floe_nsegs >= 2);
-        naive_floe(1) = 0;
-        naive_floe(end) = 0;
-        
-        usable_floe = logical((floelen > 30).* (floe_seglength < 100).*(floe_nsegs >= 3));
-        usable_floe(1) = 0; % exclude endpoints
-        usable_floe(end) = 0; % exclude endpoints
-        
-        % Now look at whether - at each naive location, there is a usable
-        % floe.
-        
-        goodfloes = usable_floe(naive_floe);
-        
-        % Naive - need at least 3 segments
-        floelen_0 = floelen(naive_floe);
-        floeind_0 = floeind(naive_floe);
-        floeind = floeind(usable_floe);
-        
-        floe_seglength_0 = floe_seglength(naive_floe);
-        
-        % One at the location of a floe
-        % Zero otherwise. Uses relaxed definition of a floe.
-        % Has 1 when a floe is present, 0 otherwise
-        all_floeids_0 = cat(1,all_floeids_0,floeind_0 + lenct);
-        % Has the floe length at the floe center, 0 otherwise
-        all_floelengths_0 = cat(1,all_floelengths_0,floelen_0);
-        all_floe_seglengths_0 = cat(1,all_floe_seglengths_0,floe_seglength_0);
-        
-        % This uses the more restricted definition of what a floe is. So in
-        % the end we apply this map to reduce the number of observed floes.
-        
-        all_usable_floes = cat(1,all_usable_floes,goodfloes);
-        
-        % Local variance of floes - this doesn't really work yet.
-        % std_len =  movstd(hasfloe,window_50k,'samplepoints',floeloc);
-        % moving_std_len = cat(1,moving_std_len,std_len);
+
         
     end
     

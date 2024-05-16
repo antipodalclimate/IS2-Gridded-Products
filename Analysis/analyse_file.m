@@ -46,20 +46,20 @@ earthellipsoid = referenceSphere('earth','m'); % For distance computation
 init_ALL; 
 
 % Initialize information needed for each process.
-for i = 1:length(PROCESSES)
-    if PROCESSES(i).DO_ANALYSIS == 1
-        run([PROCESSES(i).code_folder '/init_' PROCESSES(i).name '.m'])
+for proc_ind = 1:length(PROCESSES)
+    if PROCESSES(proc_ind).DO_ANALYSIS == 1
+        run([PROCESSES(proc_ind).code_folder '/init_' PROCESSES(proc_ind).name '.m'])
     end
 end
 
-%% Now start the main loop
+%% Now start the main loop - analysis on each track.
 
-for i = 1:numtracks % for every track
+for track_ind = 1:numtracks % for every track
 
     % First compute distance along track using lat and lon coordinates
 
-    tmp_lat = fieldmat{i,ID.lat};
-    tmp_lon = fieldmat{i,ID.lon};
+    tmp_lat = fieldmat{track_ind,ID.lat};
+    tmp_lon = fieldmat{track_ind,ID.lon};
 
     if length(tmp_lat) > 1 % along-track distance
         % These are effectively the along-track distances between central
@@ -71,8 +71,8 @@ for i = 1:numtracks % for every track
 
     % We exclude heights greater than 1km and segments that are too long,
     % and segments that are overlapping, to start. We will exclude others later.
-    usable = find(abs(fieldmat{i,ID.height}) < 1000 ...
-        & fieldmat{i,ID.length} < OPTS.max_seg_size ...
+    usable = find(abs(fieldmat{track_ind,ID.height}) < 1000 ...
+        & fieldmat{track_ind,ID.length} < OPTS.max_seg_size ...
         & [tmp_dist(1); tmp_dist] > 0.5);
 
     % Distance is now the sum of distances
@@ -94,7 +94,7 @@ for i = 1:numtracks % for every track
 
     catch
 
-        disp(['CHRIS IS WORKING ON AN ERROR FOR SHORT TRACK DISTANCES NT is ' i]);
+        disp(['CHRIS IS WORKING ON AN ERROR FOR SHORT TRACK DISTANCES NT is ' track_ind]);
         tmp_dist = [];
 
     end
@@ -109,12 +109,12 @@ for i = 1:numtracks % for every track
     sortvec = cat(1,sortvec,sort_ind+length(sortvec));
 
     % Dedupe and sort ice vector
-    is_ice = fieldmat{i,ID.type};
+    is_ice = fieldmat{track_ind,ID.type};
     is_ice = is_ice(usable);
     is_ice = is_ice(sort_ind);
 
     % Get the ID of each track
-    ID_unique = 0*is_ice + i;
+    ID_unique = 0*is_ice + track_ind;
 
     idvec = cat(1,idvec,ID_unique);
 
@@ -122,10 +122,12 @@ for i = 1:numtracks % for every track
     is_ocean = is_ice > 1;
 
     %% Now we do the specific calculations for along-track data 
-    for i = 1:length(PROCESSES)
+    for proc_ind = 1:length(PROCESSES)
         
-        if PROCESSES(i).DO_ANALYSIS == 1
-            run(fullfile(PROCESSES(i).code_folder,['analyse_' PROCESSES(i).name]))
+        if PROCESSES(proc_ind).DO_ANALYSIS == 1
+        
+            run(fullfile(PROCESSES(proc_ind).code_folder,['analyse_' PROCESSES(proc_ind).name]))
+        
         end
 
     end
