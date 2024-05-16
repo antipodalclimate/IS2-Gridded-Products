@@ -1,5 +1,6 @@
 function analyse_waves_and_FSD(file_path,outdir_waves,outdir_fsd,gridname,DO_WAVE,DO_FSD)
 %%
+% edit quickly
 
 % A pointer for the .mat file with IS2 data.
 IS2data = matfile(file_path);
