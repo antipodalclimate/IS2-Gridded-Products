@@ -118,5 +118,14 @@ for i = 1:numtracks % for every track
 
     idvec = cat(1,idvec,ID_unique);
 
+    % Ocean is the stuff that isn't ice.
+    is_ocean = is_ice > 1;
+
+    %% Now we do the specific calculations for along-track data 
+    for i = 1:length(PROCESSES)
+    if PROCESSES(i).DO_ANALYSIS == 1
+        run(fullfile(PROCESSES(i).code_folder,,PROCESSES(i).name '.m'])
+    end
+end
 end
 

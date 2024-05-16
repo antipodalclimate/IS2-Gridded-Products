@@ -82,8 +82,7 @@ for i = 1:numtracks
     
     
     
-    % Ocean is the stuff that isn't ice.
-    is_ocean = is_ice > 1;
+   
     
     if DO_WAVE % Values specific to the wave identification
         % Need heights, segment lengths, etc.

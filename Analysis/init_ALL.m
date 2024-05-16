@@ -19,8 +19,7 @@ OPTS.window_50k = 50000; % 50km window
 OPTS.max_seg_size = 200; % Maximum size for individual segments to be kept
 
 sortvec = []; % Will be used to sort the matfile
-dupevec = []; % Removing duplicates
-nousevec = []; % Indicates when a segment should be removed
+usable_vector = []; % Indicates when a segment is included
 idvec = []; % Identification of segment
 
 % Total segments - counted progressively
