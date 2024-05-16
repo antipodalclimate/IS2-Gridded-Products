@@ -123,9 +123,11 @@ for i = 1:numtracks % for every track
 
     %% Now we do the specific calculations for along-track data 
     for i = 1:length(PROCESSES)
-    if PROCESSES(i).DO_ANALYSIS == 1
-        run(fullfile(PROCESSES(i).code_folder,,PROCESSES(i).name '.m'])
+        
+        if PROCESSES(i).DO_ANALYSIS == 1
+            run(fullfile(PROCESSES(i).code_folder,['analyse_' PROCESSES(i).name]))
+        end
+
     end
-end
 end
 
