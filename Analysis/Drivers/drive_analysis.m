@@ -8,33 +8,32 @@ clear;
 
 % Change for local system.
 % This should do it, if the code is run in the Driver folder. 
-Code_loc = dir(fullfile('..','..')).folder;
+OPTS.code_loc = dir(fullfile('..','..')).folder;
 
 % Location of all Data. Fullfile adds the correct slash.
-data_loc = fullfile(Code_loc,'Data','Beam_Data_Mat');
-output_loc = fullfile(Code_loc,'Output');
-analysis_loc = fullfile(Code_loc,'Analysis/');
+OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat');
+OPTS.output_loc = fullfile(OPTS.code_loc,'Output');
+OPTS.analysis_loc = fullfile(OPTS.code_loc,'Analysis/');
+OPTS.gridname = '25km'; 
 
-addpath(analysis_loc ...
-    ); 
+addpath(OPTS.analysis_loc); 
 
 % Configuration
 hemi_dir = {'NH', 'SH'};
-gridname = '25km';
 
 PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
     'DO_REPLACE',{1,1,1}, ...
-    'code_folder',{fullfile(analysis_loc,'FSD'),fullfile(analysis_loc,'WAVES'),fullfile(analysis_loc,'LIF')});
+    'code_folder',{fullfile(OPTS.analysis_loc,'FSD'),fullfile(OPTS.analysis_loc,'WAVES'),fullfile(OPTS.analysis_loc,'LIF')});
 
 % Looping over hemispheres and files
 for hemi_ind = 1:length(hemi_dir)
 
     % List the files in each hemisphere
-    files = dir(fullfile(data_loc,hemi_dir{hemi_ind}, '*.mat'));
+    files = dir(fullfile(OPTS.data_loc,hemi_dir{hemi_ind}, '*.mat'));
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    save_dir = fullfile(output_loc,hemi_dir{hemi_ind},gridname);
+    save_dir = fullfile(OPTS.output_loc,hemi_dir{hemi_ind},OPTS.gridname);
 
     % Create the save directories
     create_directories(save_dir,PROCESSES);
@@ -61,7 +60,7 @@ for hemi_ind = 1:length(hemi_dir)
             % This runs the analysis code for the given beam/month, subject
             % to whatever we have passed for PROCESSES and using the grid
             % we identify. 
-            analyse_file(fullfile(file_dir, file_name), PROCESSES,gridname);
+            analyse_file(fullfile(file_dir, file_name), PROCESSES,OPTS);
 
         end
 

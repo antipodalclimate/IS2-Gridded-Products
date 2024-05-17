@@ -53,7 +53,8 @@ floe_ind = floe_ind(usable_floe);
 floe_seglength = floe_seglength(usable_floe);
 floe_nsegs = floe_nsegs(usable_floe);
 
-ALL_floeids = cat(1,ALL_floeids,floe_ind + lenct);
+ALL_floeids = cat(1,ALL_floeids,floe_ind + STATS.lenct);
 ALL_floelengths = cat(1,ALL_floelengths,floe_length);
 ALL_floe_seglengths = cat(1,ALL_floe_seglengths,floe_seglength);
-ALL_usable_floes = cat(1,ALL_usable_floes,usable_floe);
+
+STATS.num_floes(track_ind) = sum(usable_floe); 
