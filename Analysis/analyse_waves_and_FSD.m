@@ -1,65 +1,6 @@
 function analyse_waves_and_FSD(file_path,outdir_waves,outdir_fsd,gridname,DO_WAVE,DO_FSD)
 %%
 
-% A pointer for the .mat file with IS2 data.
-IS2data = matfile(file_path);
-% [ntracks,nfields] = size(IS2data.fields);
-
-% Output -
-% frac_under_geo nlat x nlon - fraction (by length) of measurements made in
-% each lat-lon bin that are wave affected. Equal to twice the length of the
-% measurements that are negative divided by the length of all measurements
-
-% total_under_geo - nlat x nlon - fraction (of number) " . Equal to twice
-% the number of all segments in each bin that are negative.
-
-
-
-% Options
-
-% Which beams will we choose? Index is [gt1r,gt1l,gt2r,gt2l,gt3r,gt3l]
-
-%% Because we don't care about the tracks themselves, we want to create a
-% long vector which has lat/lon/elevation. We do this by concatenating all
-% of the beams together.
-disp(['Loading...']);
-
-% Looking now but not using ssh fields
-fieldmat = IS2data.fields;
-load(file_path,'timer');
-
-disp('Loaded');
-
-% Fieldmat is nseg x nfields - for every segment we have
-% latitude/longitude/elevation/segment length/photon rate/freeboard
-
-%% Remove places with local low surface heights
-
-
-
-
-
-%%
-
-%%
-for i = 1:numtracks
-  
- 
-  %%
-
-
-
-    
-
-  
-
-    
-    
-    
-    
-end
-
-%%
 
 
 
@@ -69,8 +10,6 @@ if num_segs_total >= 1
 
 
 
-
-% K nerest neighbor search into the loaded grid to find grid locations
 
 %%
 % Take the naive sea ice concentration as the fraction of segments divided

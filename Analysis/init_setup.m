@@ -22,6 +22,7 @@ ALL_sorter = []; % Will be used to sort the matfile
 ALL_usable = []; % Indicates when a segment is included
 ALL_ids = []; % Identification of segment
 ALL_rgts = []; % Identify the RGT for each file
+ALL_beamstrength = []; % Identify if the beam is strong or weak. 
 
 % Total segments - counted progressively
 STATS.lenct = 0;
@@ -29,6 +30,8 @@ STATS.len_dupe_ct = 0;
 
 STATS.timer = load(file_path,'timer').timer;
 STATS.track_cycle = load(file_path,'track_cycle').track_cycle;
+
+if load(file_path,'track_cycle').track_cycle;
 
 STATS.numtracks = length(STATS.timer); % Number of tracks
 STATS.earthellipsoid = referenceSphere('earth','m'); % For distance computation

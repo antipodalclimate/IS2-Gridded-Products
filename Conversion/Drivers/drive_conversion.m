@@ -90,6 +90,7 @@ if ~DO_REPLACE
         disp(['Already exists at ' save_str]);
 
     catch err
+        
         disp(['Does not exist at ' save_str]);
         % Call function to convert data if file does not exist
         convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
