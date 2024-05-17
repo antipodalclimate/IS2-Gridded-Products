@@ -28,12 +28,14 @@ PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
 % Looping over hemispheres and files
 for hemi_ind = 1:length(hemi_dir)
 
+    OPTS.hemi = hemi_dir{hemi_ind}; 
+
     % List the files in each hemisphere
-    files = dir(fullfile(OPTS.data_loc,hemi_dir{hemi_ind}, '*.mat'));
+    files = dir(fullfile(OPTS.data_loc,OPTS.hemi, '*.mat'));
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    OPTS.save_dir = fullfile(OPTS.output_loc,hemi_dir{hemi_ind},OPTS.gridname);
+    OPTS.save_dir = fullfile(OPTS.output_loc,OPTS.hemi,OPTS.gridname);
 
     % Create the save directories
     create_directories(OPTS.save_dir,PROCESSES);
