@@ -12,29 +12,7 @@ if num_segs_total >= 1
 
 
 %%
-% Take the naive sea ice concentration as the fraction of segments divided
-% by the number of segments that are classified as ice or ocean
-% dbstop
-% Get the number of tracks that intersect each geographic location
-lenfac = @(x) length(unique(x)); 
 
-num_tracks_geo = accumarray(posloc_all,idvec,[numel(lat_X) 1],lenfac); 
-
-% Add up the total length of leads in each locatiom
-conc_lead_geo = accumarray(posloc_all,(fieldmat(:,type_id) > 1).*(fieldmat(:,length_id)),[numel(lat_X) 1],@sum);
-% Divide by the total length of ice. 
-conc_lead_geo = conc_lead_geo ./ accumarray(posloc_all,(fieldmat(:,type_id) > 0).*(fieldmat(:,length_id)),[numel(lat_X) 1],@sum);
-% Subtract from 1. 
-conc_lead_geo = 1 - conc_lead_geo; 
-
-% Add up total length of specular leads
-conc_spec_geo = accumarray(posloc_all,((fieldmat(:,type_id) > 1) .* (fieldmat(:,type_id) < 6)).*(fieldmat(:,length_id)),[numel(lat_X) 1],@sum);
-% Divide by total length of ice
-conc_spec_geo = conc_spec_geo ./ accumarray(posloc_all,(fieldmat(:,type_id) > 0).*(fieldmat(:,length_id)),[numel(lat_X) 1],@sum);
-% Subtract from 1
-conc_spec_geo = 1 - conc_spec_geo; 
-
-conc_SSMI_geo = accumarray(posloc_all,fieldmat(:,conc_id),[numel(lat_X) 1],@mean);
 
 %% Compute number of segments intersecting a region
 

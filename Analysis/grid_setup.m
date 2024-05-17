@@ -25,4 +25,5 @@ lenfac = @(x) length(unique(x));
 GEODATA = struct(); 
 
 
-GEODATA.num_tracks = accumarray(posloc_all,idvec,[numel(lat_X) 1],lenfac); 
+GEODATA.num_tracks = accumarray(ALL_posloc,ALL_ids,[numel(lat_X) 1],lenfac); 
+GEODATA.num_tracks_strong = accumarray(ALL_posloc(ALL_beamflag == 1),ALL_ids(ALL_beamflag == 1),[numel(lat_X) 1],lenfac); 

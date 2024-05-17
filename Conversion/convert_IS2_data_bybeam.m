@@ -45,7 +45,7 @@ nfields = length(field_names);
 % Initialize the output fields
 fields = cell(ngranules, nfields);
 timer = cell(ngranules, 1);
-beamflag = cell(ngranules,1); % Indicates whether a strong or weak beam
+beamflag = nan(ngranules,1); % Indicates whether a strong or weak beam
 track_date = nan(ngranules,1);
 track_cycle = nan(ngranules,1);
 
@@ -70,9 +70,9 @@ for fileind = 1:ngranules
         tmp = h5readatt(filename_ATL07, ['/' beam_names{beamind} '/'], 'atlas_beam_type');
         
         if strcmp(tmp,'weak')
-             beamflag{filelind} = 0;
+            beamflag(fileind) = 0;
         else
-            beamflag{fileind} = 1; 
+            beamflag(fileind) = 1;
         end
 
         for fieldind = 1:nfields
@@ -91,7 +91,7 @@ for fileind = 1:ngranules
 
                     end
 
-                    movefile(filename_ATL07, fullfile(data_loc,'Corrupted'));
+                    movefile(filename_ATL07, fullfile(OPTS.data_loc,'Corrupted'));
                     disp('Moved to Corrupted folder');
                     corrupt_file = true;
                 end

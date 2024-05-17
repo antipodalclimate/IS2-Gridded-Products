@@ -64,7 +64,7 @@ for track_ind = 1:STATS.numtracks % for every track
     % First compute distance along track using lat and lon coordinates
 
     track_rgt = STATS.track_cycle(track_ind);
-    beamclass = STATS.beamclass(track_ind);
+    beamflag = STATS.beamflag(track_ind);
 
     AT_lat = DATA{track_ind,ID.lat};
     AT_lon = DATA{track_ind,ID.lon};
@@ -130,11 +130,11 @@ for track_ind = 1:STATS.numtracks % for every track
     % Get the ID of each track at the resolution of each segment.
     id_unique = 0*AT_is_ice + track_ind;
     rgt_unique = 0*AT_is_ice + track_rgt;
-    beamstrength = 0*AT_is_ice + beamclass;
+    beamflag_unique = 0*AT_is_ice + beamflag;
 
     ALL_ids = cat(1,ALL_ids,id_unique);
     ALL_rgts = cat(1,ALL_rgts,rgt_unique);
-    ALL_beamstrength = cat(1,ALL_beamstrength,rgt_unique);
+    ALL_beamflag = cat(1,ALL_beamflag,beamflag_unique);
 
     % Ocean is the stuff that isn't ice.
     AT_is_ocean = AT_is_ice > 1;
@@ -168,14 +168,14 @@ end
 
 grid_setup; 
 
-for proc_ind = 1:length(PROCESSES)
-
-    if PROCESSES(proc_ind).DO_ANALYSIS == 1
-
-        run(fullfile(PROCESSES(proc_ind).code_folder,['grid_' PROCESSES(proc_ind).name]))
-
-    end
-
-end
+% for proc_ind = 1:length(PROCESSES)
+% 
+%     if PROCESSES(proc_ind).DO_ANALYSIS == 1
+% 
+%         run(fullfile(PROCESSES(proc_ind).code_folder,['grid_' PROCESSES(proc_ind).name]))
+% 
+%     end
+% 
+% end
 
 disp('Done');
