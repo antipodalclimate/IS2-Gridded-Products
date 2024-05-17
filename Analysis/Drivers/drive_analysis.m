@@ -33,10 +33,10 @@ for hemi_ind = 1:length(hemi_dir)
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    save_dir = fullfile(OPTS.output_loc,hemi_dir{hemi_ind},OPTS.gridname);
+    OPTS.save_dir = fullfile(OPTS.output_loc,hemi_dir{hemi_ind},OPTS.gridname);
 
     % Create the save directories
-    create_directories(save_dir,PROCESSES);
+    create_directories(OPTS.save_dir,PROCESSES);
 
     % For every individual file, need to ascertain where the data will be
     % saved and whether there exists data there already that we don't want
@@ -47,11 +47,13 @@ for hemi_ind = 1:length(hemi_dir)
         file_dir = files(file_ind).folder;
         file_name = files(file_ind).name;
 
+        OPTS.save_GEO = fullfile(OPTS.save_dir,'GEO',files(file_ind).name);
+
         for proc_ind = 1:length(PROCESSES)
 
-            temp_save_loc = fullfile(save_dir,PROCESSES(proc_ind).name,files(file_ind).name);
+            OPTS.save_loc{proc_ind} = fullfile(OPTS.save_dir,PROCESSES(proc_ind).name,files(file_ind).name);
 
-            PROCESSES(proc_ind).DO_ANALYSIS = shouldProcessFile(temp_save_loc,PROCESSES(proc_ind).DO_REPLACE,PROCESSES(proc_ind).name);
+            PROCESSES(proc_ind).DO_ANALYSIS = shouldProcessFile(OPTS.save_loc{proc_ind},PROCESSES(proc_ind).DO_REPLACE,PROCESSES(proc_ind).name);
 
         end
 
@@ -60,7 +62,7 @@ for hemi_ind = 1:length(hemi_dir)
             % This runs the analysis code for the given beam/month, subject
             % to whatever we have passed for PROCESSES and using the grid
             % we identify. 
-            analyse_file(fullfile(file_dir, file_name), PROCESSES,OPTS);
+            analyse_file(fullfile(file_dir, file_name),PROCESSES,OPTS);
 
         end
 
@@ -69,11 +71,15 @@ for hemi_ind = 1:length(hemi_dir)
 end
 
 
-function create_directories(save_dir,PROCESSES)
+function create_directories(save_dir,PROCESSES,OPTS)
 % Create necessary directories for saving processed files
 
 if ~exist(save_dir, 'dir')
     mkdir(save_dir);
+end
+
+if ~exist(fullfile(save_dir,'GEO'), 'dir')
+    mkdir(fullfile(save_dir,'GEO'));
 end
 
 for i = 1:length(PROCESSES)

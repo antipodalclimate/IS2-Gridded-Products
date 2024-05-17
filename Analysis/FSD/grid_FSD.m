@@ -1,1 +1,2 @@
-floemat = DATA(ALL_floeids,:);
+% floemat = DATA(ALL_floeids,:);
+fprintf('FSD - ')

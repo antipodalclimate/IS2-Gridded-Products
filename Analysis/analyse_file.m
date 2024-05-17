@@ -166,16 +166,18 @@ end
 
 %% Now we move to the calculations which are across all segments in this area/time.
 
-grid_setup; 
+grid_general; 
 
-% for proc_ind = 1:length(PROCESSES)
-% 
-%     if PROCESSES(proc_ind).DO_ANALYSIS == 1
-% 
-%         run(fullfile(PROCESSES(proc_ind).code_folder,['grid_' PROCESSES(proc_ind).name]))
-% 
-%     end
-% 
-% end
+fprintf('Gridding Process Data: ')
+
+for proc_ind = 1:length(PROCESSES)
+
+    if PROCESSES(proc_ind).DO_ANALYSIS == 1
+
+        run(fullfile(PROCESSES(proc_ind).code_folder,['grid_' PROCESSES(proc_ind).name]))
+
+    end
+
+end
 
 disp('Done');

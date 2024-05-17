@@ -1,7 +1,6 @@
 % Initialization of FSD code. 
 
 % These are the core output files for each track. 
-
 ALL_floelengths = []; % A vector of floe lengths
 ALL_floeids = []; % A vector of floe ids
 ALL_floe_seglengths = []; % A vector of floe segment lengths
