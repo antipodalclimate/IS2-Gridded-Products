@@ -1,7 +1,9 @@
 #!/bin/bash
 
-#SBATCH -t 3:00:00
-#SBATCH -n 8
+#SBATCH -t 48:00:00
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -p batch
 #SBATCH --mem=0
 #SBATCH --account=epscor-condo
 #SBATCH --mail-user=bndnchrs@gmail.com 
@@ -10,5 +12,10 @@
 # #SBATCH --constraint=skylake
 # #SBATCH --exclusive
 
-matlab-threaded -r drive_analysis_SH
+module load matlab
+
+cd /gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/Analysis/Drivers/
+matlab-threaded -r "drive_analysis_SH, exit"
+
+
 
