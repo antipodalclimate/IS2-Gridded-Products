@@ -152,7 +152,7 @@ for track_ind = 1:STATS.numtracks % for every track
 
     % This adds the unusable vector by the size of the field
     STATS.lenct = STATS.lenct + num_segs;
-    STATS.len_dupe_ct = STATS.len_dupe_ct + num_usable_segs;
+    STATS.len_usable = STATS.len_usable + num_usable_segs;
     STATS.num_segs(track_ind) = num_segs;
     STATS.num_usable_segs(track_ind) = num_usable_segs;
 

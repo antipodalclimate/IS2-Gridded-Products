@@ -6,7 +6,7 @@ GEODATA = struct();
 DATA = cell2mat(DATA(:,:));
 DATA = DATA(ALL_usable(ALL_sorter),:); 
 
-fprintf('Have %d usable segments to analyse out of %d total for this location \n',STATS.len_dupe_ct,STATS.lenct);
+fprintf('Have %d usable segments to analyse out of %d total for this location \n',STATS.len_usable,STATS.lenct);
 
 
 % What grid will we bin the lat-lon values into
@@ -39,5 +39,4 @@ lenfac = @(x) length(unique(x));
 GEODATA.num_tracks = accumarray(ALL_posloc,ALL_ids,[numel(GEODATA.lat) 1],lenfac); 
 GEODATA.num_tracks_strong = accumarray(ALL_posloc(ALL_beamflag == 1),ALL_ids(ALL_beamflag == 1),[numel(GEODATA.lat) 1],lenfac); 
 
-
-save(OPTS.save_GEO,'GEODATA'); 
+save(OPTS.save_GEO,'GEODATA','STATS','OPTS'); 
