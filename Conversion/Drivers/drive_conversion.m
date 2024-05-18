@@ -80,26 +80,26 @@ save_str = fullfile(savedirs{i}, [yrstr mostr '-beam-' beam_names{beamind} '.mat
 
 if ~DO_REPLACE
 
-    disp(['Checking For Existing Converted Files At ' save_str]);
+    fprintf('\n Checking %s ',[yrstr mostr '-beam-' beam_names{beamind} '.mat ---- ']);
 
     % Attempt to load the mat file to check existence
 
-    try
+    if exist(save_str,'file')
 
-        MF = matfile(save_str);
-        disp(['Already exists at ' save_str]);
+        fprintf('Exists');
 
-    catch err
+    else
         
-        disp(['Does not exist at ' save_str]);
+        fprintf('Doesnt exist ');
         % Call function to convert data if file does not exist
-        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
+
+         convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
 
     end
 
 else
 
-    disp(['Not Checking: Replacing Anything at ' save_str]);
+    fprintf('\n Replacing %s ',[yrstr mostr '-beam-' beam_names{beamind} '.mat']);
 
     % Call function to convert data regardless of existence
     convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);

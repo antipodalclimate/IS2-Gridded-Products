@@ -41,10 +41,15 @@ ngranules = length(ATL07_files);
 
 if ngranules == 0
 
+    fprintf(' ---- Empty.')
     return % don't waste our time! 
 
-end
+else
 
+    fprintf('\n');
+    disp('-----------------------------------------');
+
+end
 
 nfields = length(field_names);
 
