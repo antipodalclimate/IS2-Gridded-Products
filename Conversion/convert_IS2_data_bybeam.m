@@ -62,6 +62,7 @@ track_cycle = nan(ngranules,1);
 
 % Process each file
 for fileind = 1:ngranules
+
     if mod(fileind, 100) == 1
         fprintf('Time: %d/%d, Beam %s, File %d of %d \n', month, year,beam_names{beamind},fileind, ngranules);
     end
@@ -87,11 +88,16 @@ for fileind = 1:ngranules
         end
 
         for fieldind = 1:nfields
+            
             fields{fileind, fieldind} = double(zeros(0, 1));
-            if ~corrupt_file
+
+            if ~corrupt_file & exist(filename_ATL07,'file')
+
                 try
                     fields{fileind, fieldind} = double(h5read(filename_ATL07, ['/' beam_names{beamind} '/' field_names{fieldind}]));
+                
                 catch errread
+
                     fprintf('Error reading field %d (%s) in file %s\n', fieldind, field_names{fieldind}, filename_ATL07);
                     disp(errread.message);
                     
@@ -99,20 +105,24 @@ for fileind = 1:ngranules
 
                         mkdir(fullfile(data_loc,'Corrupted'));
 
-
                     end
 
-                    movefile(filename_ATL07, fullfile(OPTS.data_loc,'Corrupted'));
+                    movefile(filename_ATL07, fullfile(data_loc,'Corrupted'));
                     disp('Moved to Corrupted folder');
                     corrupt_file = true;
+            
                 end
+           
             end
         end
+
     catch timerrread
+
         disp('Error reading time coverage start attribute:');
         disp(timerrread.message);
         movefile(filename_ATL07, fullfile(data_loc,'Corrupted'));
         disp('Moved to Corrupted folder');
+    
     end
 end
 
