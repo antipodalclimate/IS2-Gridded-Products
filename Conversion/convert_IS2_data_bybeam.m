@@ -43,18 +43,36 @@ nfields = length(field_names);
 % Initialize the output fields
 fields = cell(ngranules, nfields);
 timer = cell(ngranules, 1);
+beamflag = nan(ngranules,1); % Indicates whether a strong or weak beam
+track_date = nan(ngranules,1);
+track_cycle = nan(ngranules,1);
 
 % Process each file
 for fileind = 1:ngranules
     if mod(fileind, 100) == 1
-        fprintf('Month %d in %d, File %d of %d \n', month, year, fileind, ngranules);
+        fprintf('Time: %d/%d, Beam %s, File %d of %d \n', month, year,beam_names{beamind},fileind, ngranules);
     end
+
+    splitname = split(ATL07_files(fileind).name,'_'); 
+    
+    track_date(fileind) = datenum(splitname{3},'YYYYmmDDHHMMss');
+    track_cycle(fileind) = str2num(splitname{4});
 
     filename_ATL07 = fullfile(filedir, ATL07_files(fileind).name);
     corrupt_file = false;
 
     try
+       
         timer{fileind} = h5readatt(filename_ATL07, '/', 'time_coverage_start');
+
+        tmp = h5readatt(filename_ATL07, ['/' beam_names{beamind} '/'], 'atlas_beam_type');
+        
+        if strcmp(tmp,'weak')
+            beamflag(fileind) = 0;
+        else
+            beamflag(fileind) = 1;
+        end
+
         for fieldind = 1:nfields
             fields{fileind, fieldind} = double(zeros(0, 1));
             if ~corrupt_file
@@ -63,7 +81,15 @@ for fileind = 1:ngranules
                 catch errread
                     fprintf('Error reading field %d (%s) in file %s\n', fieldind, field_names{fieldind}, filename_ATL07);
                     disp(errread.message);
-                    movefile(filename_ATL07, fullfile(data_loc,'Corrupted'));
+                    
+                    if ~exist(fullfile(data_loc,'Corrupted'), 'dir')
+
+                        mkdir(fullfile(data_loc,'Corrupted'));
+
+
+                    end
+
+                    movefile(filename_ATL07, fullfile(OPTS.data_loc,'Corrupted'));
                     disp('Moved to Corrupted folder');
                     corrupt_file = true;
                 end
@@ -78,5 +104,5 @@ for fileind = 1:ngranules
 end
 
 % Save results
-save(save_str, 'field_names', 'fields', 'timer', 'beam_names', '-v7.3');
+save(save_str, 'field_names', 'fields', 'timer', 'beam_names','track_cycle','track_date','beamflag','-v7.3');
 end

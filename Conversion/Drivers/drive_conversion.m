@@ -21,14 +21,15 @@ if DO_PARALLEL
 end
 
 % Change for local system.
-% Code_loc = '/Users/chorvat/Code/IS2-Gridded-Products/';
-Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
+Code_loc = dir(fullfile('..','..')).folder;
+
+% Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
 % Location of all Data. Fullfile adds the correct slash.
 data_loc = fullfile(Code_loc,'Data','All_Track_Data');
 
 % Add location of conversion code
 
-addpath(fullfile(Code_loc,'Conversion'));
+addpath(fullfile(Code_loc,'Conversion/'));
 
 
 % Hemispheric file directories. To be changed in future iteration when it
@@ -89,6 +90,7 @@ if ~DO_REPLACE
         disp(['Already exists at ' save_str]);
 
     catch err
+        
         disp(['Does not exist at ' save_str]);
         % Call function to convert data if file does not exist
         convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
