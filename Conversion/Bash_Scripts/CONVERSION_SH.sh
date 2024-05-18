@@ -10,6 +10,8 @@
 # #SBATCH --constraint=skylake
 # #SBATCH --exclusive
 
-matlab-threaded -r drive_conversion_SH
+module load matlab
 
+cd /gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/Conversion/Drivers/
+matlab-threaded -r "drive_conversion_SH, exit"
 
