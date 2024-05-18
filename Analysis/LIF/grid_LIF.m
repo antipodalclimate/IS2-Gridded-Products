@@ -25,4 +25,8 @@ LIF_GEO.ice_length_n = reshape(LIF_GEO.ice_length_n,[],STATS.numtracks);
 LIF_GEO.SIC_SSMI = accumarray(ALL_posloc,DATA(:,ID.conc_SSMI),[numel(GEODATA.lat) 1],@mean);
 LIF_GEO.SIC_AMSR = accumarray(ALL_posloc,DATA(:,ID.conc_AMSR),[numel(GEODATA.lat) 1],@mean);
 
+if OPTS.voluble == 1
+
+end
+
 save(OPTS.save_loc{proc_ind},'LIF_GEO'); 

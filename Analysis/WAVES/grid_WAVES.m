@@ -12,7 +12,7 @@ Mval = min(Mval,10);
 % Compute the fraction of all measurements (by length or number) that are
 % "wave-affected"
 
-is_ice = DATA(:,ID.type) == 1; 
+is_ice = DATA(:,ID.type) == 1;
 
 % Need to have two ssh points within 10 km
 close_to_ssh = (ALL_moving_ssh_no >= 2);%  .* (ssh_neighbors <= window_10k);
@@ -83,33 +83,13 @@ wave_num_frac_height = 2 * sum(is_under_height_var)/sum(is_included);
 wave_num_frac_both = 2 * sum(is_under_both_var)/sum(is_included);
 wave_num_frac_M_height = 2 * sum(Mval.*is_under_height_var)/sum(is_included);
 
-fprintf('\nTotal number of ice segs: %2.1f million \n',sum(is_ice)/1e6)
-fprintf('Total number of not-too-long ice segs: %2.1f million \n',sum(naive_reasonable)/1e6)
-fprintf('Total number of not-too-long ice segs with positive MA: %2.1f million \n',sum(is_included)/1e6)
-fprintf('Total number of wave_candidate ice segs: %2.1f million \n',sum(is_wave_candidate)/1e6)
-fprintf('%2.1f percent of all ice segs (by number) have negative heights \n',wave_num_frac_naive*100);
-fprintf('%2.1f percent of suitable segs (by number) have negative heights \n',wave_num_frac*100);
-fprintf('%2.1f percent of suitable segs (by number) have statistically outlier negative heights vs SSH variance \n',wave_num_frac_ssh*100);
-fprintf('%2.1f percent of suitable segs (by number) have statistically outlier negative heights vs height variance \n',wave_num_frac_height*100);
-fprintf('%2.1f percent of suitable segs (by number) have statistically outlier negative heights vs both variance \n',wave_num_frac_both*100);
-fprintf('%2.1f percent of M-adjusted suitable segs (by number) have statistically outlier negative heights \n',wave_num_frac_M_height*100);
-
-fprintf('\nTotal length of usable ice segs: %2.1f km \n',sum(DATA(is_ice,ID.length))/1000)
-fprintf('Total length of not-too-long ice segs with positive MA: %2.1f km \n',sum(DATA(is_included,ID.length))/1000)
-fprintf('Total length of wave candidate ice segs: %2.1f km \n',sum(DATA(is_wave_candidate,ID.length))/1000)
-fprintf('%2.1f percent of all ice segs (by length) have negative heights \n',wave_area_frac_naive*100);
-fprintf('%2.1f percent of suitable segs (by length) have negative heights \n',wave_area_frac*100);
-fprintf('%2.1f percent of suitable segs (by length) have statistically outlier negative heights vs SSH variance \n',wave_area_frac_ssh*100);
-fprintf('%2.1f percent of suitable segs (by length) have statistically outlier negative heights vs Height variance \n',wave_area_frac_height*100);
-fprintf('%2.1f percent of suitable segs (by length) have statistically outlier negative heights vs both variance \n',wave_area_frac_both*100);
-fprintf('%2.1f percent of M-adjusted suitable segs (by length) have statistically outlier negative heights \n',wave_area_frac_M_height*100);
 
 
 
 %% Accumulate all values that are below zero into the chosen lat-lon array
 
 % Look at average freeboard
-% Sum of freeboards by their length divided by total freeboard. 
+% Sum of freeboards by their length divided by total freeboard.
 WAVES_GEO.height_adjusted = accumarray(ALL_posloc,is_included.*DATA(:,ID.length).*DATA(:,ID.height),[numel(GEODATA.lat) 1],@sum) ./ ...
     accumarray(ALL_posloc,is_included.*DATA(:,ID.length),[numel(GEODATA.lat) 1],@sum);
 
@@ -155,22 +135,22 @@ WAVES_GEO.len_under_both_Ml = accumarray(ALL_posloc,is_under_both_var.*DATA(:,ID
 % % 2-D map of fraction by length in each cell
 % perc_under_geo = len_under_geo ./ len_meas_geo;
 % perc_under_geo(num_meas_geo==0) = nan;
-% 
+%
 % perc_ssh_under_geo = len_ssh_under_geo ./ len_meas_geo;
 % perc_ssh_under_geo(num_meas_geo==0) = nan;
-% 
+%
 % perc_height_under_geo = len_height_under_geo ./ len_meas_geo;
 % perc_height_under_geo(num_meas_geo==0) = nan;
-% 
+%
 % perc_both_under_ex_geo = len_both_under_ex_geo ./ len_meas_geo;
 % perc_both_under_ex_geo(num_meas_geo==0) = nan;
-% 
+%
 % perc_M_ssh_under_geo = len_M_ssh_under_geo ./ len_meas_geo;
 % perc_M_ssh_under_geo(num_meas_geo==0) = nan;
-% 
+%
 % perc_M_height_under_geo = len_M_height_under_geo ./ len_meas_geo;
 % perc_M_height_under_geo(num_meas_geo==0) = nan;
-% 
+%
 % naive_perc_under_geo = naive_len_under_geo ./ naive_len_meas_geo;
 % naive_perc_under_geo(naive_num_meas_geo==0) = nan;
 
@@ -178,4 +158,29 @@ WAVES_GEO.len_under_both_Ml = accumarray(ALL_posloc,is_under_both_var.*DATA(:,ID
 
 % Height variance
 
-save(OPTS.save_loc{proc_ind},'WAVES_GEO'); 
+if OPTS.voluble == 1
+
+    fprintf('\nTotal number of ice segs: %2.1f million \n',sum(is_ice)/1e6)
+    fprintf('Total number of not-too-long ice segs: %2.1f million \n',sum(naive_reasonable)/1e6)
+    fprintf('Total number of not-too-long ice segs with positive MA: %2.1f million \n',sum(is_included)/1e6)
+    fprintf('Total number of wave_candidate ice segs: %2.1f million \n',sum(is_wave_candidate)/1e6)
+    fprintf('%2.1f percent of all ice segs (by number) have negative heights \n',wave_num_frac_naive*100);
+    fprintf('%2.1f percent of suitable segs (by number) have negative heights \n',wave_num_frac*100);
+    fprintf('%2.1f percent of suitable segs (by number) have statistically outlier negative heights vs SSH variance \n',wave_num_frac_ssh*100);
+    fprintf('%2.1f percent of suitable segs (by number) have statistically outlier negative heights vs height variance \n',wave_num_frac_height*100);
+    fprintf('%2.1f percent of suitable segs (by number) have statistically outlier negative heights vs both variance \n',wave_num_frac_both*100);
+    fprintf('%2.1f percent of M-adjusted suitable segs (by number) have statistically outlier negative heights \n',wave_num_frac_M_height*100);
+
+    fprintf('\nTotal length of usable ice segs: %2.1f km \n',sum(DATA(is_ice,ID.length))/1000)
+    fprintf('Total length of not-too-long ice segs with positive MA: %2.1f km \n',sum(DATA(is_included,ID.length))/1000)
+    fprintf('Total length of wave candidate ice segs: %2.1f km \n',sum(DATA(is_wave_candidate,ID.length))/1000)
+    fprintf('%2.1f percent of all ice segs (by length) have negative heights \n',wave_area_frac_naive*100);
+    fprintf('%2.1f percent of suitable segs (by length) have negative heights \n',wave_area_frac*100);
+    fprintf('%2.1f percent of suitable segs (by length) have statistically outlier negative heights vs SSH variance \n',wave_area_frac_ssh*100);
+    fprintf('%2.1f percent of suitable segs (by length) have statistically outlier negative heights vs Height variance \n',wave_area_frac_height*100);
+    fprintf('%2.1f percent of suitable segs (by length) have statistically outlier negative heights vs both variance \n',wave_area_frac_both*100);
+    fprintf('%2.1f percent of M-adjusted suitable segs (by length) have statistically outlier negative heights \n',wave_area_frac_M_height*100);
+
+end
+
+save(OPTS.save_loc{proc_ind},'WAVES_GEO');

@@ -1,4 +1,4 @@
-fprintf('Gridding General Data \n')
+fprintf('Gridding General Data:')
 
 GEODATA = struct(); 
 
@@ -6,8 +6,11 @@ GEODATA = struct();
 DATA = cell2mat(DATA(:,:));
 DATA = DATA(ALL_usable(ALL_sorter),:); 
 
-fprintf('Have %d usable segments to analyse out of %d total for this location \n',STATS.len_usable,STATS.lenct);
+if OPTS.voluble == 1
 
+    fprintf('Have %d usable segments to analyse out of %d total for this location \n',STATS.len_usable,STATS.lenct);
+
+end
 
 % What grid will we bin the lat-lon values into
 kdloc = fullfile(OPTS.code_loc,'SupportFiles','KDTrees',['KDTree_' OPTS.gridname]);
@@ -25,7 +28,7 @@ else
     GEODATA.area = area_SH;
 end
 
-fprintf('Locating Grid Indices - ');
+fprintf(' Locating Grid Indices - ');
 % Search for the grid values for each point via their lat/lon
 ALL_posloc = knnsearch(KDtree,[DATA(:,ID.lat) DATA(:,ID.lon)],'K',1);
 fprintf('Done \n')

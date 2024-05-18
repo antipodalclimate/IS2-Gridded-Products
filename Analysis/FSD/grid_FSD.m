@@ -2,11 +2,6 @@
 fprintf('FSD - ')
 
 
-% Criteria for inclusion of a location. Kind of already did it.
-fprintf('\nMeasured %2.0f thousand chord lengths \n',length(ALL_floeids)/1e3);
-fprintf('Total chord length is %2.0f km \n',sum(ALL_floelengths)/1000);
-fprintf('Average chord length (number) is %2.0f m \n',sum(ALL_floelengths)/length(ALL_floelengths));
-
 
 % K nerest neighbor search into the loaded grid to find grid locations
 % For all the naive floes
@@ -34,5 +29,17 @@ FSD_GEO.moment(:,4) = accumarray(posloc_floes,ALL_floelengths.^4,[numel(GEODATA.
 % 
 % MCL_geo = CLD_mom_1_geo ./ CLD_mom_0_geo;
 % RCL_geo = CLD_mom_3_geo ./ CLD_mom_2_geo;
+
+%% Output. 
+
+if OPTS.voluble == 1
+
+% Criteria for inclusion of a location. Kind of already did it.
+fprintf('\nMeasured %2.0f thousand chord lengths \n',length(ALL_floeids)/1e3);
+fprintf('Total chord length is %2.0f km \n',sum(ALL_floelengths)/1000);
+fprintf('Average chord length (number) is %2.0f m \n',sum(ALL_floelengths)/length(ALL_floelengths));
+
+end
+
 
 save(OPTS.save_loc{proc_ind},'FSD_GEO'); 
