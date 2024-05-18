@@ -38,6 +38,14 @@ mostr = sprintf('%02d', month);
 % Obtaining all .h5 files in the directory
 ATL07_files = dir([filedir '*ATL07-0*_' yrstr mostr '*.nc']);
 ngranules = length(ATL07_files);
+
+if ngranules == 0
+
+    return % don't waste our time! 
+
+end
+
+
 nfields = length(field_names);
 
 % Initialize the output fields
