@@ -52,7 +52,7 @@ track_cycle = nan(ngranules,1);
 % Process each file
 for fileind = 1:ngranules
     if mod(fileind, 100) == 1
-        fprintf('Month %d in %d, File %d of %d \n', month, year, fileind, ngranules);
+        fprintf('Time: %d/%d, Beam %s, File %d of %d \n', month, year,beam_names{beamind},fileind, ngranules);
     end
 
     splitname = split(ATL07_files(fileind).name,'_'); 
