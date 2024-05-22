@@ -12,7 +12,7 @@ OPTS.code_loc = dir(fullfile('..','..')).folder;
 
 % Location of all Data. Fullfile adds the correct slash.
 OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat');
-OPTS.output_loc = fullfile(OPTS.code_loc,'Output');
+OPTS.processing_loc = fullfile(OPTS.code_loc,'Data','Processed_Data');
 OPTS.analysis_loc = fullfile(OPTS.code_loc,'Analysis/');
 
 OPTS.voluble = 0; 
@@ -25,7 +25,7 @@ addpath(OPTS.analysis_loc);
 hemi_dir = {'NH', 'SH'};
 
 PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
-    'DO_REPLACE',{1,1,1}, ...
+    'DO_REPLACE',{0,0,0}, ...
     'code_folder',{fullfile(OPTS.analysis_loc,'FSD'),fullfile(OPTS.analysis_loc,'WAVES'),fullfile(OPTS.analysis_loc,'LIF')});
 
 % Looping over hemispheres and files

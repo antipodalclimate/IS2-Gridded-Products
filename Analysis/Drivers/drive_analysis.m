@@ -12,7 +12,7 @@ OPTS.code_loc = dir(fullfile('..','..')).folder;
 
 % Location of all Data. Fullfile adds the correct slash.
 OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat');
-OPTS.output_loc = fullfile(OPTS.code_loc,'Output');
+OPTS.processing_loc = fullfile(OPTS.code_loc,'Data','Processed_Data');
 OPTS.analysis_loc = fullfile(OPTS.code_loc,'Analysis/');
 
 OPTS.voluble = 0; 
@@ -38,7 +38,7 @@ for hemi_ind = 1:length(hemi_dir)
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    OPTS.save_dir = fullfile(OPTS.output_loc,OPTS.hemi,OPTS.gridname);
+    OPTS.save_dir = fullfile(OPTS.processing_loc,OPTS.hemi,OPTS.gridname);
 
     % Create the save directories
     create_directories(OPTS.save_dir,PROCESSES);
