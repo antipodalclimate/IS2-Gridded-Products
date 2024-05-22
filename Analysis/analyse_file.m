@@ -73,19 +73,25 @@ for track_ind = 1:STATS.numtracks % for every track
         % These are effectively the along-track distances between central
         % points in each segment.
         AT_dist = distance([AT_lat(1:end-1) AT_lon(1:end-1)],[AT_lat(2:end) AT_lon(2:end)],STATS.earthellipsoid);
+        % We exclude heights greater than 1km and segments that are too long,
+        % and segments that are overlapping, to start. We will exclude others later.
+        usable = find(abs(DATA{track_ind,ID.height}) < 1000 ...
+            & DATA{track_ind,ID.length} < OPTS.max_seg_size ...
+            & [AT_dist(1); AT_dist] > 0.5);
+        AT_dist = [0; cumsum(AT_dist)];
+
+
     else
-        AT_dist = [];
+        
+        
+        usable = []; 
+        AT_dist = 0;
+    
     end
 
-    % We exclude heights greater than 1km and segments that are too long,
-    % and segments that are overlapping, to start. We will exclude others later.
-    usable = find(abs(DATA{track_ind,ID.height}) < 1000 ...
-        & DATA{track_ind,ID.length} < OPTS.max_seg_size ...
-        & [AT_dist(1); AT_dist] > 0.5);
 
     % Distance is now the sum of distances
     if length(AT_lat) > 1
-        AT_dist = [0; cumsum(AT_dist)];
     end
 
     % total number of segments in the track.
