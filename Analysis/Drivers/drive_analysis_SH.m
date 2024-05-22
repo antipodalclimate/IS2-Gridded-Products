@@ -38,7 +38,7 @@ for hemi_ind = 2:length(hemi_dir)
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    OPTS.save_dir = fullfile(OPTS.output_loc,OPTS.hemi,OPTS.gridname);
+    OPTS.save_dir = fullfile(OPTS.processing_loc,OPTS.hemi,OPTS.gridname);
 
     % Create the save directories
     create_directories(OPTS.save_dir,PROCESSES);
