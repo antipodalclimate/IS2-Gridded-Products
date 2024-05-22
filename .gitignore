@@ -2,4 +2,5 @@ Data/*
 Output/*
 *.asv
 slurm*
-drive_*_*
+*_*.sh
+drive_*_*.m
