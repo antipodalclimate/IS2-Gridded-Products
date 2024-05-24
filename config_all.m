@@ -1,3 +1,4 @@
+clear
 % config_all - for running analysis/conversion/compilation scripts
 
 % Change for local system.
