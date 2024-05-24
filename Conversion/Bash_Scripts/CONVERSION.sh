@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -t 3:00:00
+#SBATCH -t 12:00:00
 #SBATCH -n 8
 #SBATCH --mem=0
 #SBATCH --account=epscor-condo
