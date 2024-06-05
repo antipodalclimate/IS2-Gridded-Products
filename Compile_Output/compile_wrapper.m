@@ -29,10 +29,14 @@ for yr_ind = 1:OPTS.nyears
 
                 for proc_ind = 1:length(PROCESSES)
 
-                    proc_files = dir(fullfile(OPTS.save_dir,PROCESSES(proc_ind).name,'*.mat'));
+                    if PROCESSES(proc_ind).DO_COMPILE == 1
 
-                    % Run the file given proc_files.
-                    run([PROCESSES(proc_ind).code_folder '/compile_' PROCESSES(proc_ind).name '.m'])
+                        proc_files = dir(fullfile(OPTS.save_dir,PROCESSES(proc_ind).name,'*.mat'));
+
+                        % Run the file given proc_files.
+                        run([PROCESSES(proc_ind).code_folder '/compile_' PROCESSES(proc_ind).name '.m'])
+
+                    end
 
                 end
 
