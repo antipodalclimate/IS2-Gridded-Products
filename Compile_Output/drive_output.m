@@ -30,9 +30,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
     OPTS.nx = size(GEODATA.lat,1);
     OPTS.ny = size(GEODATA.lat,2);
     %%
-
-    %
-
+    
     compile_wrapper(OPTS,PROCESSES);
 
 end
