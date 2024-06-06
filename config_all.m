@@ -6,16 +6,18 @@ clear
 OPTS.code_loc = dir(fullfile('.')).folder;
 % Location of all Data. Fullfile adds the correct slash.
 OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat');
+
+% Where the processed (gridded .mat data) ends up
 OPTS.processing_loc = fullfile(OPTS.code_loc,'Data','Processed_Data');
+
+% Data where we identify the modules we want to use
 OPTS.analysis_loc = fullfile(OPTS.code_loc,'Analysis/');
 
+% Data for netcdf output 
 OPTS.output_loc = fullfile(OPTS.code_loc,'Output/');
 
 OPTS.voluble = 0; 
 OPTS.gridname = '25km';
-% Location of all Data. Fullfile adds the correct slash.
-OPTS.processing_loc = fullfile(OPTS.code_loc,'Data','Processed_Data');
-% OPTS.save_dir = fullfile(OPTS.code_loc,'Output');
 
 OPTS.voluble = 0;
 
