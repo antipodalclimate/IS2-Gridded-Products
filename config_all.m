@@ -15,7 +15,7 @@ OPTS.voluble = 0;
 OPTS.gridname = '25km';
 % Location of all Data. Fullfile adds the correct slash.
 OPTS.processing_loc = fullfile(OPTS.code_loc,'Data','Processed_Data');
-OPTS.save_loc = fullfile(OPTS.code_loc,'Output');
+% OPTS.save_dir = fullfile(OPTS.code_loc,'Output');
 
 OPTS.voluble = 0;
 
@@ -26,6 +26,6 @@ OPTS.hemi_dir = {'NH', 'SH'};
 
 % Now process configuration
 PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
-    'DO_REPLACE',{0,0,0}, ...
+    'DO_REPLACE',{0,0,1}, ...
     'DO_COMPILE',{1,1,1}, ...
     'code_folder',{fullfile(OPTS.analysis_loc,'FSD'),fullfile(OPTS.analysis_loc,'WAVES'),fullfile(OPTS.analysis_loc,'LIF')});

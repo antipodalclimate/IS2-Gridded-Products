@@ -19,7 +19,7 @@ LIF_GEO.water_length_n = reshape(LIF_GEO.water_length_n,[],STATS.numtracks);
 LIF_GEO.specular_length_n = accumarray(by_int_ind,(DATA(:,ID.type) > 1) .* (DATA(:,ID.type) < 6) .*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
 LIF_GEO.specular_length_n = reshape(LIF_GEO.specular_length_n,[],STATS.numtracks); 
 
-LIF_GEO.ice_length_n = accumarray(by_int_ind,(DATA(:,ID.type) == 0).*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
+LIF_GEO.ice_length_n = accumarray(by_int_ind,(DATA(:,ID.type) == 1).*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
 LIF_GEO.ice_length_n = reshape(LIF_GEO.ice_length_n,[],STATS.numtracks); 
 
 LIF_GEO.SIC_SSMI = accumarray(ALL_posloc,DATA(:,ID.conc_SSMI),[numel(GEODATA.lat) 1],@mean);

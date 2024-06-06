@@ -5,16 +5,16 @@
 %   save_path - Directory of the .mat file created by previous code.
 
 % These should be set in config_all.m
-clearvars -except PROCESSES OPTS hemi_dir
+clearvars -except PROCESSES OPTS
 
 addpath(OPTS.analysis_loc);
 
 % Configuration
 
 % Looping over hemispheres and files
-for hemi_ind = 1:length(hemi_dir)
-    
-    OPTS.hemi = hemi_dir{hemi_ind};
+for hemi_ind = 1:length(OPTS.hemi_dir)
+
+    OPTS.hemi = OPTS.hemi_dir{hemi_ind};
 
     % List the files in each hemisphere
     files = dir(fullfile(OPTS.data_loc,OPTS.hemi, '*.mat'));
