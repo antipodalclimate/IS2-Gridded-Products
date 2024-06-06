@@ -14,8 +14,9 @@
 
 module load matlab
 
-cd /gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/Analysis/Drivers/
-matlab-threaded -r "drive_analysis, exit"
+cd /gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/
+
+matlab-threaded -r "config_all, cd('Analysis/Drivers'),  drive_analysis, exit"
 
 
 
