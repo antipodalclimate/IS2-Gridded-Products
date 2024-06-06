@@ -35,7 +35,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
         file_dir = files(file_ind).folder;
         file_name = files(file_ind).name;
 
-        OPTS.save_GEO = fullfile(OPTS.save_dir,'GEO',files(file_ind).name);
+        OPTS.save_GEO = fullfile(OPTS.processing_subdir,'GEO',files(file_ind).name);
 
         for proc_ind = 1:length(PROCESSES)
 
