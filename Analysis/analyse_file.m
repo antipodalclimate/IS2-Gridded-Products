@@ -52,7 +52,7 @@ init_setup;
 
 % Initialize information needed for each process.
 for proc_ind = 1:length(PROCESSES)
-    if PROCESSES(proc_ind).DO_ANALYSIS == 1
+    if PROCESSES(proc_ind).DO_ANALYSIS == 1 
         run([PROCESSES(proc_ind).code_folder '/init_' PROCESSES(proc_ind).name '.m'])
     end
 end

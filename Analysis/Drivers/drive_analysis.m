@@ -21,10 +21,10 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    OPTS.save_dir = fullfile(OPTS.processing_loc,OPTS.hemi,OPTS.gridname);
+    OPTS.processing_subdir = fullfile(OPTS.processing_loc,OPTS.hemi,OPTS.gridname);
 
     % Create the save directories
-    create_directories(OPTS.save_dir,PROCESSES);
+    create_directories(OPTS.processing_subdir,PROCESSES);
 
     % For every individual file, need to ascertain where the data will be
     % saved and whether there exists data there already that we don't want
@@ -39,7 +39,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
 
         for proc_ind = 1:length(PROCESSES)
 
-            OPTS.save_loc{proc_ind} = fullfile(OPTS.save_dir,PROCESSES(proc_ind).name,files(file_ind).name);
+            OPTS.save_loc{proc_ind} = fullfile(OPTS.processing_subdir,PROCESSES(proc_ind).name,files(file_ind).name);
 
             PROCESSES(proc_ind).DO_ANALYSIS = shouldProcessFile(OPTS.save_loc{proc_ind},PROCESSES(proc_ind).DO_REPLACE,PROCESSES(proc_ind).name);
 
@@ -90,14 +90,15 @@ function DO_ANALYSIS = shouldProcessFile(save_loc, DO_REPLACE,name)
 
 % If the file exists and we don't want to replace it, don't analyse it.
 if exist(save_loc, 'file') == 2 && ~DO_REPLACE
-    disp([name 'files already exist: ' save_loc]);
+
+    disp([name ' files already exist: ' save_loc]);
     DO_ANALYSIS = 0;
 
 else
 
     % If it doesn't exists, or we do want to replace anything, let's go for
     % it.
-    % disp(['Saving ' name ' files to ' save_loc]);
+    disp(['Saving ' name ' files to ' save_loc]);
     DO_ANALYSIS = 1;
 
 end
