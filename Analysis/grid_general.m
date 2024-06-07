@@ -42,4 +42,10 @@ lenfac = @(x) length(unique(x));
 GEODATA.num_tracks = accumarray(ALL_posloc,ALL_ids,[numel(GEODATA.lat) 1],lenfac); 
 GEODATA.num_tracks_strong = accumarray(ALL_posloc(ALL_beamflag == 1),ALL_ids(ALL_beamflag == 1),[numel(GEODATA.lat) 1],lenfac); 
 
+GEODATA.num_segs = accumarray(ALL_posloc,ALL_usable,[numel(GEODATA.lat) 1],@sum); 
+GEODATA.num_segs_strong = accumarray(ALL_posloc(ALL_beamflag == 1),ALL_usable(ALL_beamflag == 1),[numel(GEODATA.lat) 1],lenfac); 
+
+GEODATA.len_segs = accumarray(ALL_posloc,DATA(:,ID.length),[numel(GEODATA.lat) 1],@sum); 
+GEODATA.len_segs_strong = accumarray(ALL_posloc(ALL_beamflag == 1),DATA(ALL_beamflag == 1,ID.length).*ALL_usable(ALL_beamflag == 1),[numel(GEODATA.lat) 1],@sum); 
+
 save(OPTS.save_GEO,'GEODATA','STATS','OPTS'); 
