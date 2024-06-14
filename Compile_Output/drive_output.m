@@ -40,7 +40,11 @@ OUT = struct();
 
 % Loop over years and months
 for yr_ind = 1:OPTS.nyears
+
+    fprintf('\n Year %d: Month',yr_ind + 2017)
+
     for mo_ind = 1:12
+        fprintf(' %d ',mo_ind)
         yrstr = num2str(yr_ind + 2017);
         mostr = sprintf('%02d', mo_ind); % Pad month with zero if needed
 

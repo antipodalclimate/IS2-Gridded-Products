@@ -22,6 +22,9 @@ LIF_GEO.specular_length_n = reshape(LIF_GEO.specular_length_n,[],STATS.numtracks
 LIF_GEO.ice_length_n = accumarray(by_int_ind,(DATA(:,ID.type) == 1).*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
 LIF_GEO.ice_length_n = reshape(LIF_GEO.ice_length_n,[],STATS.numtracks); 
 
+% This is the average SSMI or AMSR concentration. We will compare this
+% against the monthly-averaged value at each location when evaluating
+% whether we want to consider a product at a given location. 
 LIF_GEO.SIC_SSMI = accumarray(ALL_posloc,DATA(:,ID.conc_SSMI),[numel(GEODATA.lat) 1],@mean);
 LIF_GEO.SIC_AMSR = accumarray(ALL_posloc,DATA(:,ID.conc_AMSR),[numel(GEODATA.lat) 1],@mean);
 
