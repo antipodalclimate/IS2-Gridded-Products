@@ -1,4 +1,4 @@
-fprintf('WAVES - ')
+disp(['Saving WAVE gridded files to ' OPTS.save_loc{proc_ind}]);
 
 %% This code produces the gridded wave products
 
@@ -182,5 +182,7 @@ if OPTS.voluble == 1
     fprintf('%2.1f percent of M-adjusted suitable segs (by length) have statistically outlier negative heights \n',wave_area_frac_M_height*100);
 
 end
+
+
 
 save(OPTS.save_loc{proc_ind},'WAVES_GEO');

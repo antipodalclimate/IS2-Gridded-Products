@@ -174,7 +174,7 @@ end
 
 grid_general; 
 
-fprintf('Gridding Process Data: ')
+fprintf('Gridding Process Data for %d processes: \n',sum(vertcat(PROCESSES.DO_ANALYSIS)))
 
 for proc_ind = 1:length(PROCESSES)
 
@@ -185,5 +185,3 @@ for proc_ind = 1:length(PROCESSES)
     end
 
 end
-
-disp('Done');

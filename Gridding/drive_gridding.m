@@ -50,7 +50,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
             % This runs the analysis code for the given beam/month, subject
             % to whatever we have passed for PROCESSES and using the grid
             % we identify.
-            analyse_file(fullfile(file_dir, file_name),PROCESSES,OPTS);
+            analyse_and_grid_file(fullfile(file_dir, file_name),PROCESSES,OPTS);
 
         end
 
@@ -98,7 +98,6 @@ else
 
     % If it doesn't exists, or we do want to replace anything, let's go for
     % it.
-    disp(['Saving ' name ' files to ' save_loc]);
     DO_ANALYSIS = 1;
 
 end

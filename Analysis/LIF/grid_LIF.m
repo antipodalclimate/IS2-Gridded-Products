@@ -1,6 +1,5 @@
 % Add up the total length of leads in each location
-
-fprintf('LIF - ')
+disp(['Saving LIF gridded files to ' OPTS.save_loc{proc_ind}]);
 
 LIF_GEO = struct();
 
