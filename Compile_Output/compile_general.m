@@ -11,6 +11,7 @@ for gran_ind = 1:length(GEO_files)
     TEMP.n(:,:,gran_ind) = reshape(GEODATA.num_tracks,size(GEODATA.lat));
     TEMP.n_strong(:,:,gran_ind) = reshape(GEODATA.num_tracks_strong,size(GEODATA.lat));
 
+    
 end
 
 OUT.GEO.n_gran_all(:,:,mo_ind,yr_ind) = sum(TEMP.n,3,'omitmissing');

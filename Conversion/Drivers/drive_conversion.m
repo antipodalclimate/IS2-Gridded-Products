@@ -5,7 +5,7 @@
 DO_PARALLEL = 0;
 
 % Decide if existing files should be replaced
-DO_REPLACE = 0;
+DO_REPLACE = 1;
 
 if DO_PARALLEL
 

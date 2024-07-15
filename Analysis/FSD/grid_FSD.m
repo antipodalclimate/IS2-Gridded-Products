@@ -1,7 +1,5 @@
 % floemat = DATA(ALL_floeids,:);
-fprintf('FSD - ')
-
-
+disp(['Saving FSD gridded files to ' OPTS.save_loc{proc_ind}]);
 
 % K nerest neighbor search into the loaded grid to find grid locations
 % For all the naive floes
