@@ -14,7 +14,9 @@ OPTS.processing_loc = fullfile(OPTS.code_loc,'Data','Processed_Data');
 OPTS.analysis_loc = fullfile(OPTS.code_loc,'Analysis/');
 
 % Data for netcdf output 
-OPTS.output_loc = fullfile(OPTS.code_loc,'Output/');
+OPTS.output_loc = '/Users/chorvat/Dropbox (Brown)/Research Projects/Active/Data/ICESat-2/Gridded-Products-Data/';
+
+% OPTS.output_loc = fullfile(OPTS.code_loc,'Output/');
 
 OPTS.voluble = 0; 
 OPTS.gridname = '25km';
@@ -28,6 +30,6 @@ OPTS.hemi_dir = {'NH', 'SH'};
 
 % Now process configuration
 PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
-    'DO_REPLACE',{0,0,0}, ...
+    'DO_REPLACE',{1,1,1}, ...
     'DO_COMPILE',{1,1,1}, ...
     'code_folder',{fullfile(OPTS.analysis_loc,'FSD'),fullfile(OPTS.analysis_loc,'WAVES'),fullfile(OPTS.analysis_loc,'LIF')});
