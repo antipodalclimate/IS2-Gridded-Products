@@ -51,6 +51,7 @@ Contains scripts for each individual process we want to examine. Each has the fo
     - grid_XX - this uses along-track lat/lon data to create a gridded product using user-specified functions for each track. 
     
   -- Called from drive_output
+  
     - compile_XX - this allocates and defines output fields for writing to netcdf
 
 Currently there are four "processes" that are created. You can edit in config_all.m to add more. 
