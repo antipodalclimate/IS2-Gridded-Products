@@ -45,6 +45,7 @@ Contains scripts for taking individual tracks in .mat format and converting to g
 Contains scripts for each individual process we want to examine. Each has the following files:
 
   -- Called from drive_gridding
+  
     - init_XX - this code pre-allocated fields we will be analysing for the analysis step
     - analyse_XX - this performs along-track analysis on each granule
     - grid_XX - this uses along-track lat/lon data to create a gridded product using user-specified functions for each track. 
