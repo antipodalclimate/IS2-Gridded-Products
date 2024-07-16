@@ -7,6 +7,8 @@
 % These should be set in config_all.m
 clearvars -except PROCESSES OPTS
 
+run(fullfile(OPTS.code_loc, 'config_all.m'));
+
 addpath(OPTS.analysis_loc);
 
 % Configuration

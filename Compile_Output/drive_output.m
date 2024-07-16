@@ -52,7 +52,8 @@ for yr_ind = 1:OPTS.nyears
         TEMP = struct();
 
         if ~isempty(GEO_files)
-            compile_general;
+            
+            run(fullfile(OPTS.code_loc,'General','compile_general.m'));
 
             % Process each specific module's task
             for proc_ind = 1:length(PROCESSES)
