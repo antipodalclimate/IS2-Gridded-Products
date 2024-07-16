@@ -22,8 +22,6 @@ for gran_ind = 1:length(GEO_files)
     TEMP.beamstr(gran_ind) = sum(STATS.beamflag) > 0;
     TEMP.ngran(gran_ind) = n_gran; 
 
-    TEMP.nsegs(gran_ind) = reshape(STATS.num_segs,size(GEODATA.lat)); 
-
 
 end
 

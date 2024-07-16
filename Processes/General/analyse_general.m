@@ -2,7 +2,8 @@
 
 % The general end product is a segmentation of each track into floes with
 % their specified location/length/segment count and corresponding index.
-% track_rgt = STATS.track_cycle(track_ind);
+
+track_rgt = STATS.track_cycle(track_ind);
 beamflag = STATS.beamflag(track_ind);
 
 AT_lat = DATA{track_ind,ID.lat};

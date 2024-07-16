@@ -6,6 +6,10 @@ clearvars -except OPTS PROCESSES
 % This should do it, if the code is run in the Driver folder.
 OPTS.code_loc = dir(fullfile('.')).folder;
 % Location of all Data. Fullfile adds the correct slash.
+
+% Location of .h5 files which contain the actual ATL07 granules
+OPTS.track_loc = fullfile(OPTS.code_loc,'Data','All_Track_Data');
+% Location of .mat files which aggregate tracks into months/beams
 OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat');
 
 % Where the processed (gridded .mat data) ends up
@@ -22,9 +26,8 @@ OPTS.output_loc = '/Users/chorvat/Dropbox (Brown)/Research Projects/Active/Data/
 OPTS.voluble = 0; 
 OPTS.gridname = '25km';
 
-OPTS.voluble = 0;
-
-OPTS.gridname = '25km';
+OPTS.DO_PARALLEL_CONVERSION = 0; 
+OPTS.DO_REPLACE_CONVERSION = 1; 
 
 % Configuration
 OPTS.hemi_dir = {'NH', 'SH'};

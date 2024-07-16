@@ -15,7 +15,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
 
     % Directory where processed files will be saved
     % Specifies the hemisphere and the grid used in the product
-    OPTS.save_dir = fullfile(OPTS.processing_loc, OPTS.hemi, OPTS.gridname);
+    OPTS.save_dir = fullfile(OPTS.processed_data_loc, OPTS.hemi, OPTS.gridname);
 
     % Each file should have a corresponding geophysical file
     % (which contains lat, lon, strong beam data, etc)
@@ -52,8 +52,8 @@ for yr_ind = 1:OPTS.nyears
         TEMP = struct();
 
         if ~isempty(GEO_files)
-            
-            run(fullfile(OPTS.code_loc,'General','compile_general.m'));
+
+            run(fullfile(OPTS.process_loc,'General','compile_general.m'));
 
             % Process each specific module's task
             for proc_ind = 1:length(PROCESSES)

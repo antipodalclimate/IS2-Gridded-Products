@@ -63,7 +63,7 @@ for track_ind = 1:STATS.numtracks % for every track
 
     % First compute distance along track using lat and lon coordinates
 
-    run(fullfile(OPTS.code_loc,'General','analyse_general'))
+    run(fullfile(OPTS.process_loc,'General','analyse_general'))
 
     %% Now we do the specific calculations for along-track data
     for proc_ind = 1:length(PROCESSES)
@@ -93,7 +93,7 @@ end
 %% Now we move to the calculations which are across all segments in this area/time.
 
 
-run(fullfile(OPTS.analysis_loc,'grid_general'));
+run(fullfile(OPTS.process_loc,'General','grid_general'));
 
 fprintf('Gridding Process Data for %d processes: \n',sum(vertcat(PROCESSES.DO_ANALYSIS)))
 

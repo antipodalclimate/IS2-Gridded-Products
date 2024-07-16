@@ -9,7 +9,7 @@ clearvars -except PROCESSES OPTS
 
 run(fullfile(OPTS.code_loc, 'config_all.m'));
 
-addpath(OPTS.analysis_loc);
+addpath(OPTS.process_loc);
 
 % Configuration
 
@@ -23,10 +23,10 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
 
     % Directory where processed files will be saved. This specifies the
     % hemisphere and the grid used in the product.
-    OPTS.processing_subdir = fullfile(OPTS.processing_loc,OPTS.hemi,OPTS.gridname);
+    OPTS.processed_data_subdir = fullfile(OPTS.processed_data_loc,OPTS.hemi,OPTS.gridname);
 
     % Create the save directories
-    create_directories(OPTS.processing_subdir,PROCESSES);
+    create_directories(OPTS.processed_data_subdir,PROCESSES);
 
     % For every individual file, need to ascertain where the data will be
     % saved and whether there exists data there already that we don't want
@@ -37,11 +37,11 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
         file_dir = files(file_ind).folder;
         file_name = files(file_ind).name;
 
-        OPTS.save_GEO = fullfile(OPTS.processing_subdir,'GEO',files(file_ind).name);
+        OPTS.save_GEO = fullfile(OPTS.processed_data_subdir,'GEO',files(file_ind).name);
 
         for proc_ind = 1:length(PROCESSES)
 
-            OPTS.save_loc{proc_ind} = fullfile(OPTS.processing_subdir,PROCESSES(proc_ind).name,files(file_ind).name);
+            OPTS.save_loc{proc_ind} = fullfile(OPTS.processed_data_subdir,PROCESSES(proc_ind).name,files(file_ind).name);
 
             PROCESSES(proc_ind).DO_ANALYSIS = shouldProcessFile(OPTS.save_loc{proc_ind},PROCESSES(proc_ind).DO_REPLACE,PROCESSES(proc_ind).name);
 
