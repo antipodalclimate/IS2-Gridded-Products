@@ -130,7 +130,7 @@ function DO_ANALYSIS = shouldProcessFile(save_loc, DO_REPLACE,name)
 % Determine whether to process the file based on existence and DO_REPLACE flag
 
 % If the file exists and we don't want to replace it, don't analyse it.
-if exist(save_loc, 'file') == 2 && ~DO_REPLACE
+if exist([save_loc '.mat'], 'file') == 2 && ~DO_REPLACE
 
     disp([name ' files already exist: ' save_loc]);
     DO_ANALYSIS = 0;
