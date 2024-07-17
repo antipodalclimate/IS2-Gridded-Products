@@ -85,6 +85,9 @@ h5write(OPTS.h5_name, '/latitude', GEODATA.lat);
 h5create(OPTS.h5_name, '/longitude', size(GEODATA.lat));
 h5write(OPTS.h5_name, '/longitude', GEODATA.lon);
 
+h5create(OPTS.h5_name, '/area', size(GEODATA.lat));
+h5write(OPTS.h5_name, '/area', GEODATA.area);
+
 proc_fields = fieldnames(OUT);
 
 for proc_ind = 1:length(proc_fields)

@@ -1,4 +1,4 @@
-function analyse_file(file_path,PROCESSES,OPTS)
+function analyse_and_grid_file(file_path,PROCESSES,OPTS)
 % Code that helps with the analysis of a single .mat file that corresponds
 % to a month and beam of aggregated IS2 data.
 
