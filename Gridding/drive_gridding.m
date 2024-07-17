@@ -32,34 +32,22 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
     % saved and whether there exists data there already that we don't want
     % to overwrite. DO_REPLACE flags tell us not to overwrite data if it is
     % found there.
-    for file_ind = 1:length(files)
+
+    parfor file_ind = 1:length(files)
+
 
         file_dir = files(file_ind).folder;
         file_name = files(file_ind).name;
 
-        OPTS.save_GEO = fullfile(OPTS.processed_data_subdir,'GEO',files(file_ind).name);
-
-        for proc_ind = 1:length(PROCESSES)
-
-            OPTS.save_loc{proc_ind} = fullfile(OPTS.processed_data_subdir,PROCESSES(proc_ind).name,files(file_ind).name);
-
-            PROCESSES(proc_ind).DO_ANALYSIS = shouldProcessFile(OPTS.save_loc{proc_ind},PROCESSES(proc_ind).DO_REPLACE,PROCESSES(proc_ind).name);
-
-        end
-
-        if sum([PROCESSES(:).DO_ANALYSIS]) > 0
-
-            % This runs the analysis code for the given beam/month, subject
-            % to whatever we have passed for PROCESSES and using the grid
-            % we identify.
-            analyse_and_grid_file(fullfile(file_dir, file_name),PROCESSES,OPTS);
-
-        end
+        % This runs the analysis code for the given beam/month, subject
+        % to whatever we have passed for PROCESSES and using the grid
+        % we identify.
+        analyse_and_grid_file(fullfile(file_dir, file_name),PROCESSES,OPTS);
 
     end
 
-end
 
+end
 
 function create_directories(save_dir,PROCESSES,OPTS)
 % Create necessary directories for saving processed files
@@ -87,21 +75,3 @@ end
 
 end
 
-function DO_ANALYSIS = shouldProcessFile(save_loc, DO_REPLACE,name)
-% Determine whether to process the file based on existence and DO_REPLACE flag
-
-% If the file exists and we don't want to replace it, don't analyse it.
-if exist(save_loc, 'file') == 2 && ~DO_REPLACE
-
-    disp([name ' files already exist: ' save_loc]);
-    DO_ANALYSIS = 0;
-
-else
-
-    % If it doesn't exists, or we do want to replace anything, let's go for
-    % it.
-    DO_ANALYSIS = 1;
-
-end
-
-end
