@@ -15,7 +15,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
 
     % Directory where processed files will be saved
     % Specifies the hemisphere and the grid used in the product
-    OPTS.save_dir = fullfile(OPTS.processing_loc, OPTS.hemi, OPTS.gridname);
+    OPTS.save_dir = fullfile(OPTS.processed_data_loc, OPTS.hemi, OPTS.gridname);
 
     % Each file should have a corresponding geophysical file
     % (which contains lat, lon, strong beam data, etc)
@@ -40,7 +40,11 @@ OUT = struct();
 
 % Loop over years and months
 for yr_ind = 1:OPTS.nyears
+
+    fprintf('\n Year %d: Month',yr_ind + 2017)
+
     for mo_ind = 1:12
+        fprintf(' %d ',mo_ind)
         yrstr = num2str(yr_ind + 2017);
         mostr = sprintf('%02d', mo_ind); % Pad month with zero if needed
 
@@ -48,7 +52,8 @@ for yr_ind = 1:OPTS.nyears
         TEMP = struct();
 
         if ~isempty(GEO_files)
-            compile_general;
+
+            run(fullfile(OPTS.process_loc,'General','compile_general.m'));
 
             % Process each specific module's task
             for proc_ind = 1:length(PROCESSES)
@@ -79,6 +84,9 @@ h5write(OPTS.h5_name, '/latitude', GEODATA.lat);
 
 h5create(OPTS.h5_name, '/longitude', size(GEODATA.lat));
 h5write(OPTS.h5_name, '/longitude', GEODATA.lon);
+
+h5create(OPTS.h5_name, '/area', size(GEODATA.lat));
+h5write(OPTS.h5_name, '/area', GEODATA.area);
 
 proc_fields = fieldnames(OUT);
 

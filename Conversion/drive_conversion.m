@@ -1,13 +1,8 @@
-%% drive_conversion.m
+function drive_conversion(OPTS)
+
 % Function that drives the conversion of all netcdf-based data.
 
-% Initialize parallel pool if required
-DO_PARALLEL = 0;
-
-% Decide if existing files should be replaced
-DO_REPLACE = 0;
-
-if DO_PARALLEL
+if OPTS.DO_PARALLEL_CONVERSION
 
     try
 
@@ -20,25 +15,18 @@ if DO_PARALLEL
 
 end
 
-% Change for local system.
-Code_loc = dir(fullfile('..','..')).folder;
-
-% Code_loc = '/gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/'
-% Location of all Data. Fullfile adds the correct slash.
-data_loc = fullfile(Code_loc,'Data','All_Track_Data');
-
 % Add location of conversion code
 
-addpath(fullfile(Code_loc,'Conversion/'));
+addpath(fullfile(OPTS.code_loc,'Conversion/'));
 
 
 % Hemispheric file directories. To be changed in future iteration when it
 % becomes necessary. Should just search through files using data_loc/*/*.nc
 % for example
-filedirs = {fullfile(data_loc, 'NH/'), fullfile(data_loc, 'SH/')};
+filedirs = {fullfile(OPTS.track_loc, 'NH/'), fullfile(OPTS.track_loc, 'SH/')};
 
 % Hemispheric save directories. Keep this I think for simplicity.
-savedirs = { fullfile(Code_loc,'Data','Beam_Data_Mat/NH'), fullfile(Code_loc,'Data','Beam_Data_Mat/SH')};
+savedirs = { fullfile(OPTS.code_loc,'Data','Beam_Data_Mat/NH'), fullfile(OPTS.code_loc,'Data','Beam_Data_Mat/SH')};
 
 % IS2 beam identifies
 beam_names = {'gt1r','gt1l','gt2r','gt2l','gt3r','gt3l'};
@@ -54,13 +42,13 @@ for i = 1:2
         % Loop through months
         for mo = 1:12
             % Execute conversion in parallel for each beam if required
-            if DO_PARALLEL
+            if OPTS.DO_PARALLEL_CONVERSION
                 parfor beamind = 1:6
-                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE);
+                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS.DO_REPLACE_CONVERSION);
                 end
             else
                 for beamind = 1:6
-                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE);
+                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS.DO_REPLACE_CONVERSION);
                 end
             end
         end
@@ -69,7 +57,9 @@ for i = 1:2
 
 end
 
-function do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE);
+end
+
+function do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE)
 
 % Format year and month strings
 yrstr = num2str(yr);
@@ -89,11 +79,11 @@ if ~DO_REPLACE
         fprintf('Exists');
 
     else
-        
+
         fprintf('Doesnt exist ');
         % Call function to convert data if file does not exist
 
-         convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
+        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
 
     end
 

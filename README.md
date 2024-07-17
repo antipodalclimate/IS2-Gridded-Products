@@ -31,18 +31,34 @@ Contains scripts and drivers that take in IS2 data and organizes it into Matlab 
   - **Bash_Scripts/**
       Contains scripts for submitting SLURM jobs that run the relevant conversion code. For example IS2_nc_to_mat.sh submits a job to run drive_conversion.m 
 
+**Gridding/**
+
+Contains scripts for taking individual tracks in .mat format and converting to gridded data.  The output is placed in the Output/ directory
+
+  drive_gridding.m is the main loop over all tracks/beams etc. 
+  analyse_and_grid_file contains the month-by-month looping for an individual file and handles all along-track calculated statistics. 
+  grid_general does the statistical gridding for general variables (number of granules, segments, etc). 
+  init_setup sets up the general gridding. 
 
 **Analysis/** 
 
-Contains scripts and drivers that analyse RGT-wise data in .mat format to obtain gridded products. The output is placed in the Output/ directory
+Contains scripts for each individual process we want to examine. Each has the following files:
+
+  Called from drive_gridding
   
-  - _analyse_waves_and_FSD.m_
-      Script to do the actual analysis for wave, FSD, LIF info by combining many RGTs into grids using forms of Matlab accumarray function.
-  - **Drivers/**
-      Contains a series of "drivers" that operate over the .mat files. The analysis is looped over month-by-month. These loops take place across hemispheres, years, and month, but accumulate all beams into grids. 
-  - **Bash_Scripts/**
-      Contains scripts for submitting SLURM jobs that run the relevant conversion code. For example IS2_nc_to_mat.sh submits a job to run drive_conversion.m 
- 
+    - init_XX - this code pre-allocated fields we will be analysing for the analysis step
+    - analyse_XX - this performs along-track analysis on each granule
+    - grid_XX - this uses along-track lat/lon data to create a gridded product using user-specified functions for each track. 
+    
+  Called from drive_output
+  
+    - compile_XX - this allocates and defines output fields for writing to netcdf
+
+Currently there are four "processes" that are created. You can edit in config_all.m to add more. 
+ - General/ - MUST be run and is called outside of the "process loop" in drive_gridding.m
+ - WAVES/ 
+ - FSD
+ - LIF
 
 **Output/**
   Subfolder that contains output from Analysis scripts. Output data will be in subfolders of the form HEM-GRID (i.e. NH-100x100 is NH gridded data on a 100x100 km gridding). This data is large and is ignored here except for showing directory structure. 
