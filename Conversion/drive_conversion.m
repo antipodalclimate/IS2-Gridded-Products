@@ -26,7 +26,7 @@ addpath(fullfile(OPTS.code_loc,'Conversion/'));
 filedirs = {fullfile(OPTS.track_loc, 'NH/'), fullfile(OPTS.track_loc, 'SH/')};
 
 % Hemispheric save directories. Keep this I think for simplicity.
-savedirs = { fullfile(OPTS.code_loc,'Data','Beam_Data_Mat',OPTS.version_string,'NH'), fullfile(OPTS.code_loc,'Data',OPTS.version_string,'Beam_Data_Mat/SH')};
+savedirs = { fullfile(OPTS.code_loc,'Data','Beam_Data_Mat',OPTS.version_string,'NH'), fullfile(OPTS.code_loc,'Data','Beam_Data_Mat',OPTS.version_string,'SH')};
 
 % IS2 beam identifies
 beam_names = {'gt1r','gt1l','gt2r','gt2l','gt3r','gt3l'};

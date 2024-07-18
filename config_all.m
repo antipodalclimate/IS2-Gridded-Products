@@ -14,7 +14,7 @@ OPTS.version_string = 'v6';
 OPTS.track_loc = fullfile(OPTS.code_loc,'Data','All_Track_Data',OPTS.version_string);
 
 % Location of .mat files which aggregate tracks into months/beams
-OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat');
+OPTS.data_loc = fullfile(OPTS.code_loc,'Data','Beam_Data_Mat',OPTS.version_string);
 
 % Where the processed (gridded .mat data) ends up
 OPTS.processed_data_loc = fullfile(OPTS.code_loc,'Data','Processed_Data',OPTS.version_string);
