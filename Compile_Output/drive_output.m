@@ -73,7 +73,8 @@ end
 
 % Function to write output data to HDF5 file
 function write_output(OPTS, OUT, GEODATA)
-OPTS.h5_name = fullfile(OPTS.output_loc, ['IS2_Data_' OPTS.gridname '_' OPTS.hemi '.h5']);
+
+OPTS.h5_name = fullfile(OPTS.output_loc, ['IS2_Data_' OPTS.gridname '_' OPTS.hemi '_' OPTS.version_string '.h5']);
 
 if exist(OPTS.h5_name, 'file')
     delete(OPTS.h5_name);
