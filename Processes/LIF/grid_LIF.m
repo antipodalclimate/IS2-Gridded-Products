@@ -27,6 +27,12 @@ LIF_GEO.ice_length_n = reshape(LIF_GEO.ice_length_n,[],STATS.numtracks);
 LIF_GEO.SIC_SSMI = accumarray(ALL_posloc,DATA(:,ID.conc_SSMI),[numel(GEODATA.lat) 1],@mean);
 LIF_GEO.SIC_AMSR = accumarray(ALL_posloc,DATA(:,ID.conc_AMSR),[numel(GEODATA.lat) 1],@mean);
 
+LIF_GEO.SIC_SSMI_n = accumarray(by_int_ind,DATA(:,ID.conc_SSMI),[numel(GEODATA.lat)*max(ALL_ids) 1],@mean);
+LIF_GEO.SIC_SSMI_n = reshape(LIF_GEO.SIC_SSMI_n,[],STATS.numtracks); 
+LIF_GEO.SIC_AMSR_n = accumarray(by_int_ind,DATA(:,ID.conc_AMSR),[numel(GEODATA.lat)*max(ALL_ids) 1],@mean);
+LIF_GEO.SIC_AMSR_n = reshape(LIF_GEO.SIC_AMSR_n,[],STATS.numtracks); 
+
+
 if OPTS.voluble == 1
 
 end
