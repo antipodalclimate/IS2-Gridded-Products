@@ -31,6 +31,14 @@ field_names = {
     'sea_ice_segments/stats/ice_conc_amsr2'
     };
 
+if strcmp(OPTS.version_string,'v5')
+
+    field_names{8} = 'sea_ice_segments/stats/ice_conc';
+    field_names{9} = 'sea_ice_segments/stats/ice_conc'; 
+    
+end
+
+
 % Formatting year and month
 yrstr = num2str(year);
 mostr = sprintf('%02d', month);
