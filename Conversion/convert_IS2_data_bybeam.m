@@ -1,4 +1,4 @@
-function convert_IS2_data_bybeam(year, month, beamind, filedir, save_str)
+function convert_IS2_data_bybeam(year, month, beamind, filedir, save_str,OPTS)
 % Converts and saves data from ATL10 HDF5 files.
 %
 % Inputs:
@@ -35,7 +35,7 @@ if strcmp(OPTS.version_string,'v5')
 
     field_names{8} = 'sea_ice_segments/stats/ice_conc';
     field_names{9} = 'sea_ice_segments/stats/ice_conc'; 
-    
+
 end
 
 

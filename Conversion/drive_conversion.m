@@ -44,11 +44,11 @@ for i = 1:2
             % Execute conversion in parallel for each beam if required
             if OPTS.DO_PARALLEL_CONVERSION
                 parfor beamind = 1:6
-                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS.DO_REPLACE_CONVERSION);
+                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS);
                 end
             else
                 for beamind = 1:6
-                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS.DO_REPLACE_CONVERSION);
+                    do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS);
                 end
             end
         end
@@ -59,7 +59,7 @@ end
 
 end
 
-function do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,DO_REPLACE)
+function do_conversion(i,yr,mo,beamind,filedirs,savedirs,beam_names,OPTS)
 
 % Format year and month strings
 yrstr = num2str(yr);
@@ -68,7 +68,7 @@ mostr = sprintf('%02d', mo); % Pad month with zero if needed
 % Generate full save path for the current beam
 save_str = fullfile(savedirs{i}, [yrstr mostr '-beam-' beam_names{beamind} '.mat']);
 
-if ~DO_REPLACE
+if ~OPTS.DO_REPLACE_CONVERSION
 
     fprintf('\n Checking %s ',[yrstr mostr '-beam-' beam_names{beamind} '.mat ---- ']);
 
@@ -83,7 +83,7 @@ if ~DO_REPLACE
         fprintf('Doesnt exist ');
         % Call function to convert data if file does not exist
 
-        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
+        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str,OPTS);
 
     end
 
@@ -92,7 +92,7 @@ else
     fprintf('\n Replacing %s ',[yrstr mostr '-beam-' beam_names{beamind} '.mat']);
 
     % Call function to convert data regardless of existence
-    convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str);
+    convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str,OPTS);
 
 end
 
