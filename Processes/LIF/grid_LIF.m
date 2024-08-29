@@ -12,12 +12,15 @@ by_int_ind = (ALL_ids-1)*(numel(GEODATA.lat)) + ALL_posloc;
 % To get the total LIF, we take sums over n
 % To get strong-beam LIF, we can multiply and sum by STATS.beamflag
 
+% Length of all water returns
 LIF_GEO.water_length_n = accumarray(by_int_ind,(DATA(:,ID.type) > 1).*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
 LIF_GEO.water_length_n = reshape(LIF_GEO.water_length_n,[],STATS.numtracks); 
 
+% Length of specular lead returns
 LIF_GEO.specular_length_n = accumarray(by_int_ind,(DATA(:,ID.type) > 1) .* (DATA(:,ID.type) < 6) .*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
 LIF_GEO.specular_length_n = reshape(LIF_GEO.specular_length_n,[],STATS.numtracks); 
 
+% Length of all ice returns
 LIF_GEO.ice_length_n = accumarray(by_int_ind,(DATA(:,ID.type) == 1).*(DATA(:,ID.length)),[numel(GEODATA.lat)*max(ALL_ids) 1],@sum);
 LIF_GEO.ice_length_n = reshape(LIF_GEO.ice_length_n,[],STATS.numtracks); 
 

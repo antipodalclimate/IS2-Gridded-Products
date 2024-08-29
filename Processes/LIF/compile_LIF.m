@@ -11,7 +11,9 @@ for gran_ind = 1:length(GEO_files)
     % [N_floes,N_floes_strong,R_mean,R_rep] = deal(zeros(OPTS.nx,OPTS.ny,12,OPTS.nyears));
     TEMP.ice_length{gran_ind} = reshape(LIFDATA.ice_length_n,[size(GEODATA.lat) n_gran]);
     TEMP.ice_length_strong{gran_ind} = reshape(bsxfun(@times,LIFDATA.ice_length_n,STATS.beamflag'),[size(GEODATA.lat) n_gran]);
-
+    
+    TEMP.specular_length{gran_ind} = reshape(LIFDATA.specular_length_n,[size(GEODATA.lat) n_gran]);
+    TEMP.specular_length_strong{gran_ind} = reshape(bsxfun(@times,LIFDATA.specular_length_n,STATS.beamflag'),[size(GEODATA.lat) n_gran]);
 
     TEMP.water_length{gran_ind} = reshape(LIFDATA.water_length_n,[size(GEODATA.lat) n_gran]);
     TEMP.water_length_strong{gran_ind} = reshape(bsxfun(@times,LIFDATA.water_length_n,STATS.beamflag'),[size(GEODATA.lat) n_gran]);
@@ -27,8 +29,23 @@ end
 
 % Now make output fields
 
-OUT.LIF.LIF(:,:,mo_ind,yr_ind) = sum(cat(3,TEMP.ice_length{:}),3)./(sum(cat(3,TEMP.water_length{:}),3) + sum(cat(3,TEMP.ice_length{:}),3));
-OUT.LIF.LIF_strong(:,:,mo_ind,yr_ind) = sum(cat(3,TEMP.ice_length_strong{:}),3)./(sum(cat(3,TEMP.ice_length_strong{:}),3) + sum(cat(3,TEMP.ice_length_strong{:}),3));
+ice_length = cat(3,TEMP.ice_length{:});
+water_length = cat(3,TEMP.water_length{:});
+spec_length = cat(3,TEMP.specular_length{:});
+ice_length_strong = cat(3,TEMP.ice_length_strong{:});
+water_length_strong = cat(3,TEMP.water_length_strong{:});
+spec_length_strong = cat(3,TEMP.specular_length_strong{:});
+
+
+
+
+OUT.LIF.LIF(:,:,mo_ind,yr_ind) = sum(ice_length,3)./(sum(water_length,3) + sum(ice_length,3));
+
+OUT.LIF.LIF_strong(:,:,mo_ind,yr_ind) = sum(ice_length_strong,3)./(sum(water_length_strong,3) + sum(ice_length_strong,3));
+
+OUT.LIF.LIF_spec(:,:,mo_ind,yr_ind) = (sum(ice_length,3) + sum(spec_length,3))./(sum(water_length,3) + sum(ice_length,3));
+
+OUT.LIF.LIF_spec_strong(:,:,mo_ind,yr_ind) = (sum(ice_length_strong,3) + sum(spec_length_strong,3))./(sum(water_length_strong,3) + sum(ice_length_strong,3));
 
 TEMP.SIC_SSMI(TEMP.SIC_SSMI == 0) = nan; 
 TEMP.SIC_AMSR(TEMP.SIC_AMSR == 0) = nan; 
