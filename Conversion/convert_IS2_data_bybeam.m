@@ -1,5 +1,5 @@
 function convert_IS2_data_bybeam(year, month, beamind, filedir, save_str,OPTS)
-% Converts and saves data from ATL10 HDF5 files.
+% Converts and saves data from ATL07 HDF5 files.
 %
 % Inputs:
 %   year      - Year of the data

@@ -28,8 +28,8 @@ OPTS.output_loc = fullfile(OPTS.code_loc,'Output/');
 OPTS.voluble = 0; 
 OPTS.gridname = '25km';
 
-OPTS.DO_PARALLEL_CONVERSION = 0; 
-OPTS.DO_REPLACE_CONVERSION = 1; 
+OPTS.DO_PARALLEL_CONVERSION = 1; 
+OPTS.DO_REPLACE_CONVERSION = 0; 
 
 % Configuration
 OPTS.hemi_dir = {'NH', 'SH'};
