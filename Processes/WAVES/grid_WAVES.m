@@ -128,7 +128,7 @@ WAVES_GEO.len_under_both = 2*accumarray(ALL_posloc,is_under_both_var.*DATA(:,ID.
 % Don't need to multiply by 2 with M
 WAVES_GEO.len_under_ssh_M = accumarray(ALL_posloc,is_under_ssh_var.*DATA(:,ID.length).*Mval,[numel(GEODATA.lat) 1],@sum);
 WAVES_GEO.len_under_height_M = accumarray(ALL_posloc,is_under_height_var.*DATA(:,ID.length).*Mval,[numel(GEODATA.lat) 1],@sum);
-WAVES_GEO.len_under_both_Ml = accumarray(ALL_posloc,is_under_both_var.*DATA(:,ID.length).*Mval,[numel(GEODATA.lat) 1],@sum);
+WAVES_GEO.len_under_both_M = accumarray(ALL_posloc,is_under_both_var.*DATA(:,ID.length).*Mval,[numel(GEODATA.lat) 1],@sum);
 
 
 % Accumulate wave energy into a single matrix
