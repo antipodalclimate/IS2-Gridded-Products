@@ -15,7 +15,7 @@ function convert_IS2_data_bybeam(year, month, beamind, filedir, save_str,OPTS)
 %   - timer: Character array with start time of each track
 %   - beam_names: Names of the beams
 
-[data_loc,~,~] = fileparts(filedir);
+[data_loc,~,~] = fileparts(filedir)
 
 % Options and Initialization
 beam_names = {'gt1r', 'gt1l', 'gt2r', 'gt2l', 'gt3r', 'gt3l'};
@@ -44,7 +44,8 @@ yrstr = num2str(year);
 mostr = sprintf('%02d', month);
 
 % Obtaining all .h5 files in the directory
-ATL07_files = dir([filedir '*ATL07-0*_' yrstr mostr '*.nc']);
+ATL07_files = dir([filedir '*ATL07-0*_' yrstr mostr '*.*']);
+
 ngranules = length(ATL07_files);
 
 if ngranules == 0

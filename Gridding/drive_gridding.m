@@ -33,7 +33,7 @@ for hemi_ind = 1:length(OPTS.hemi_dir)
     % to overwrite. DO_REPLACE flags tell us not to overwrite data if it is
     % found there.
 
-    parfor file_ind = 1:length(files)
+    for file_ind = 1:length(files)
 
         file_dir = files(file_ind).folder;
         file_name = files(file_ind).name;

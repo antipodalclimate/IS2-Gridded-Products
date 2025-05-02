@@ -29,13 +29,13 @@ OPTS.voluble = 0;
 OPTS.gridname = '25km';
 
 OPTS.DO_PARALLEL_CONVERSION = 0; 
-OPTS.DO_REPLACE_CONVERSION = 1; 
+OPTS.DO_REPLACE_CONVERSION = 0; 
 
 % Configuration
 OPTS.hemi_dir = {'NH', 'SH'};
 
 % Now process configuration
 PROCESSES = struct('name',{'FSD','WAVES','LIF'}, ...
-    'DO_REPLACE',{1,1,1}, ...
+    'DO_REPLACE',{0,0,0}, ...
     'DO_COMPILE',{1,1,1}, ...
     'code_folder',{fullfile(OPTS.process_loc,'FSD'),fullfile(OPTS.process_loc,'WAVES'),fullfile(OPTS.process_loc,'LIF')});
