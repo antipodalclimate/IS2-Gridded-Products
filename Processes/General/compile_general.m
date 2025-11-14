@@ -1,4 +1,4 @@
-[TEMP.n,TEMP.n_strong] = deal(nan(OPTS.nx,OPTS.ny,length(GEO_files)));
+[TEMP.n,TEMP.n_strong,TEMP.num_segs,TEMP.num_segs_strong] = deal(nan(OPTS.nx,OPTS.ny,length(GEO_files)));
 
 % Accumulate within each granule
 
@@ -10,9 +10,13 @@ for gran_ind = 1:length(GEO_files)
 
     TEMP.n(:,:,gran_ind) = reshape(GEODATA.num_tracks,size(GEODATA.lat));
     TEMP.n_strong(:,:,gran_ind) = reshape(GEODATA.num_tracks_strong,size(GEODATA.lat));
+    TEMP.num_segs(:,:,gran_ind) = reshape(GEODATA.num_segs,size(GEODATA.lat)); 
+    TEMP.num_segs_strong(:,:,gran_ind) = reshape(GEODATA.num_segs_strong,size(GEODATA.lat));
 
-    
 end
+
+OUT.GEO.num_segs(:,:,mo_ind,yr_ind) = sum(TEMP.num_segs,3,'omitmissing');
+OUT.GEO.num_segs_strong(:,:,mo_ind,yr_ind) = sum(TEMP.num_segs_strong,3,'omitmissing');
 
 OUT.GEO.n_gran_all(:,:,mo_ind,yr_ind) = sum(TEMP.n,3,'omitmissing');
 OUT.GEO.n_gran_strong(:,:,mo_ind,yr_ind) = sum(TEMP.n_strong,3,'omitmissing');

@@ -13,7 +13,7 @@ fprintf('COMPILING OUTPUT AND WRITING INTO NETCDF \n');
 
 
 % Loop over hemispheres and files
-for hemi_ind = 1:length(OPTS.hemi_dir)
+for hemi_ind = 2:length(OPTS.hemi_dir)
     OPTS.hemi = OPTS.hemi_dir{hemi_ind};
     disp('----------------------------------')
     fprintf('Processing hemisphere: %s\n', OPTS.hemi);
