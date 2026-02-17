@@ -44,7 +44,7 @@ yrstr = num2str(year);
 mostr = sprintf('%02d', month);
 
 % Obtaining all .h5 files in the directory
-ATL07_files = dir([filedir '*ATL07-0*_' yrstr mostr '*.nc']);
+ATL07_files = dir([filedir '*ATL07-0*_' yrstr mostr '*']);
 ngranules = length(ATL07_files);
 
 if ngranules == 0
@@ -76,9 +76,15 @@ for fileind = 1:ngranules
     end
 
     splitname = split(ATL07_files(fileind).name,'_'); 
-    
-    track_date(fileind) = datenum(splitname{3},'YYYYmmDDHHMMss');
-    track_cycle(fileind) = str2num(splitname{4});
+
+    if ~strcmp(splitname{1},'processed')
+        split_dateID = 2; 
+    else
+        split_dateID = 3;
+    end
+
+    track_date(fileind) = datenum(splitname{split_dateID},'YYYYmmDDHHMMss');
+    track_cycle(fileind) = str2num(splitname{split_dateID+1});
 
     filename_ATL07 = fullfile(filedir, ATL07_files(fileind).name);
     corrupt_file = false;

@@ -8,7 +8,7 @@ OPTS.code_loc = dir(fullfile('.')).folder;
 % Location of all Data. Fullfile adds the correct slash.
 
 % Version we care about
-OPTS.version_string = 'v6'; 
+OPTS.version_string = 'v7'; 
 
 % Location of .h5 files which contain the actual ATL07 granules
 OPTS.track_loc = fullfile(OPTS.code_loc,'Data','All_Track_Data',OPTS.version_string);
@@ -28,8 +28,8 @@ OPTS.output_loc = fullfile(OPTS.code_loc,'Output/');
 OPTS.voluble = 0; 
 OPTS.gridname = '25km';
 
-OPTS.DO_PARALLEL_CONVERSION = 1; 
-OPTS.DO_REPLACE_CONVERSION = 0; 
+OPTS.DO_PARALLEL_CONVERSION = 0; 
+OPTS.DO_REPLACE_CONVERSION = 1; 
 
 % Configuration
 OPTS.hemi_dir = {'NH', 'SH'};

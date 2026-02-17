@@ -38,7 +38,7 @@ beam_names = {'gt1r','gt1l','gt2r','gt2l','gt3r','gt3l'};
 % Loop through hemisphere directories
 for i = 1:2
     % Loop through years
-    for yr = 2018:2024
+    for yr = 2018:2025
         % Loop through months
         for mo = 1:12
             % Execute conversion in parallel for each beam if required
