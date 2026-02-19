@@ -9,7 +9,20 @@ beamflag = STATS.beamflag(track_ind);
 AT_lat = DATA{track_ind,ID.lat};
 AT_lon = DATA{track_ind,ID.lon};
 
-if length(AT_lat) > 1 % along-track distance
+if length(AT_lat) < 2
+
+    % If there is only one or zero points, we can't do any analysis.
+    % We exclude these by emptying the data.
+    for field_ind = 1:size(DATA,2)
+        DATA{track_ind,field_ind} = [];
+    end
+
+    AT_lat = [];
+    AT_lon = [];
+    AT_dist = [];
+    usable = [];
+
+else
     % These are effectively the along-track distances between central
     % points in each segment.
     AT_dist = distance([AT_lat(1:end-1) AT_lon(1:end-1)],[AT_lat(2:end) AT_lon(2:end)],STATS.earthellipsoid);
@@ -19,12 +32,6 @@ if length(AT_lat) > 1 % along-track distance
         & DATA{track_ind,ID.length} < OPTS.max_seg_size ...
         & [AT_dist(1); AT_dist] > 0.5);
     AT_dist = [0; cumsum(AT_dist)];
-
-else
-
-
-    usable = [];
-    AT_dist = zeros(size(AT_lat));
 
 end
 

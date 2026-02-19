@@ -91,11 +91,18 @@ for i = 1:numtracks
     lon = fieldmat{i,lon_id};
 
  
-    if length(lat) > 1 % along-track distance
+    if length(lat) < 2
+        % If there is only one or zero points, we can't do any analysis.
+        % We exclude these by emptying the data.
+        for f = 1:size(fieldmat, 2)
+            fieldmat{i, f} = [];
+        end
+        dist = [];
+        unusable = [];
+    else
+        % along-track distance
         dist = distance([lat(1:end-1) lon(1:end-1)],[lat(2:end) lon(2:end)],earthellipsoid);
         dist = [0; cumsum(dist)];
-    else
-	    dist = zeros(size(lat));
     end
 
     % total number of segments
