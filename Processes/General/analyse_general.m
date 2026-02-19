@@ -24,7 +24,7 @@ else
 
 
     usable = [];
-    AT_dist = 0;
+    AT_dist = zeros(size(AT_lat));
 
 end
 

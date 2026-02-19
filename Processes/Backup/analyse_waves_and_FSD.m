@@ -93,12 +93,9 @@ for i = 1:numtracks
  
     if length(lat) > 1 % along-track distance
         dist = distance([lat(1:end-1) lon(1:end-1)],[lat(2:end) lon(2:end)],earthellipsoid);
+        dist = [0; cumsum(dist)];
     else
-	    dist = [];
-    end
-    
-    if length(lat) > 1 
-       dist = [0; cumsum(dist)];
+	    dist = zeros(size(lat));
     end
 
     % total number of segments
