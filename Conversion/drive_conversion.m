@@ -6,7 +6,7 @@ if OPTS.DO_PARALLEL_CONVERSION
 
     try
 
-        parpool(gcp('nocreate'));
+        parpool(4,gcp('nocreate'));
 
     catch
 
@@ -36,9 +36,9 @@ beam_names = {'gt1r','gt1l','gt2r','gt2l','gt3r','gt3l'};
 % switching between the parallel or serial codes in testing.
 
 % Loop through hemisphere directories
-for i = 1:2
+for i = 2:-1:1
     % Loop through years
-    for yr = 2018:2025
+    for yr = 2024:2025
         % Loop through months
         for mo = 1:12
             % Execute conversion in parallel for each beam if required
@@ -83,7 +83,7 @@ if ~OPTS.DO_REPLACE_CONVERSION
         fprintf('Doesnt exist ');
         % Call function to convert data if file does not exist
 
-        convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str,OPTS);
+      convert_IS2_data_bybeam(yr, mo, beamind, filedirs{i}, save_str,OPTS);
 
     end
 

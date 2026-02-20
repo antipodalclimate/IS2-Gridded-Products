@@ -24,14 +24,12 @@ else
 
 
     usable = [];
-    AT_dist = 0;
+    AT_dist = [];
 
 end
 
 
 % Distance is now the sum of distances
-if length(AT_lat) > 1
-end
 
 % total number of segments in the track.
 num_segs = length(AT_dist);

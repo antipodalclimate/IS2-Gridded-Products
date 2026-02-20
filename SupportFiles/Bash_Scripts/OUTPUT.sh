@@ -16,5 +16,7 @@ module load matlab
 
 cd /gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/
 
-matlab-threaded -r "config_all, cd('Conversion/'), drive_conversion(OPTS), exit"
+matlab-threaded -r "config_all, cd('Output/'),  drive_output, exit"
+
+
 

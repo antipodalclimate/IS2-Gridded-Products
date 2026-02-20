@@ -4,6 +4,12 @@ GEODATA = struct();
 
 % Convert everything to all usable segments. 
 DATA = cell2mat(DATA(:,:));
+
+length(ALL_usable)
+length(ALL_sorter)
+sum(ALL_usable)
+sum(ALL_sorter)
+
 DATA = DATA(ALL_usable(ALL_sorter),:); 
 
 if OPTS.voluble == 1

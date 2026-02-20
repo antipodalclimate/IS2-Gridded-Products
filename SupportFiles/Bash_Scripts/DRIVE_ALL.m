@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH -t 48:00:00
-#SBATCH -n 1
+#SBATCH -n 8
 #SBATCH -N 1
 #SBATCH -p batch
 #SBATCH --mem=0
@@ -16,5 +16,5 @@ module load matlab
 
 cd /gpfs/data/epscor/chorvat/IS2/IS2-Gridded-Products/
 
-matlab-threaded -r "config_all, cd('Conversion/'), drive_conversion(OPTS), exit"
+matlab-threaded -nodisplay -nojvm -nodesktop -r "super_driver, exit"
 
